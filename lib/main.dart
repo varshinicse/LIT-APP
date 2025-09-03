@@ -39,6 +39,7 @@ import 'package:lit/pages/coming_soon.dart';
 import 'package:lit/ecommerce/billing_history.dart';
 import 'package:lit/ecommerce/selection_address.dart';
 import 'package:lit/ecommerce/cart_page.dart';
+
 void main() {
   runApp(
     ChangeNotifierProvider(
@@ -65,6 +66,13 @@ class MyApp extends StatelessWidget {
 
       routes: {
         '/home': (context) => const MainLayout(),
+
+        // ✅ Added this line for /login
+        '/login': (context) => const SignInPage(),
+
+        '/signin': (context) => const SignInPage(),
+        '/signup': (context) => const SignUpPage(),
+        '/forgot_password': (context) => const ForgotPasswordPage(),
         '/ir_icon': (context) => const IrIconPage(),
         '/profile': (context) => const ProfilePage(),
         '/newsletter': (context) => const NewsletterPage(),
@@ -72,7 +80,8 @@ class MyApp extends StatelessWidget {
         '/marketplace/sustainable': (context) => const SustainableStorePage(),
         '/marketplace/luxury': (context) => const LuxuryStorePage(),
         '/category': (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+          final args =
+              ModalRoute.of(context)!.settings.arguments as Map<String, String>;
           return CategoryPage(
             title: args['title'] ?? 'Category',
             categoryKey: args['categoryKey'] ?? 'shop all',
@@ -80,11 +89,6 @@ class MyApp extends StatelessWidget {
             gender: args['gender'] ?? 'men',
           );
         },
-
-
-        '/signin': (context) => const SignInPage(),
-        '/signup': (context) => const SignUpPage(),
-        '/forgot_password': (context) => const ForgotPasswordPage(),
         '/game-category': (context) => const GameCategoryPage(),
         '/ir-icon': (context) => const IrIconPage(),
         '/game': (context) => const GamePage(),
@@ -96,8 +100,10 @@ class MyApp extends StatelessWidget {
         '/languageCountrySettings': (context) => const LanguageSettingsPage(),
         '/notificationSettings': (context) => const NotificationSettingsPage(),
         '/subscriptionSettings': (context) => const SubscriptionSettingsPage(),
-        '/orderPreferencesSettings': (context) => const OrderPreferencesSettingsPage(),
-        '/returnCancellationSettings': (context) => const ReturnCancellationSettingsPage(),
+        '/orderPreferencesSettings': (context) =>
+            const OrderPreferencesSettingsPage(),
+        '/returnCancellationSettings': (context) =>
+            const ReturnCancellationSettingsPage(),
         '/supportLegalSettings': (context) => const SupportLegalSettingsPage(),
         '/payment-methods': (context) => const PaymentMethodsPage(),
         '/subscription-plan-details': (context) => const SubscriptionPlanPage(),
@@ -110,10 +116,11 @@ class MyApp extends StatelessWidget {
         '/billing-history': (context) => const BillingHistoryPage(),
         '/shipping-address': (context) => const ShippingAddressPage(),
         '/cart': (context) {
-          final cartItems = ModalRoute.of(context)!.settings.arguments as List<Map<String, dynamic>>;
+          final cartItems =
+              ModalRoute.of(context)!.settings.arguments
+                  as List<Map<String, dynamic>>;
           return CartPage(cartItems: cartItems);
         },
-
       },
     );
   }
