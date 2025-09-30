@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:lit/data/global_data.dart';
+import 'package:lit/global_data.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -19,7 +19,6 @@ class CustomBottomNavBar extends StatelessWidget {
   void addToCart(BuildContext context, Map<String, dynamic> product) {
     cartItems.add(product); // This must be a global/shared list
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +75,7 @@ class CustomBottomNavBar extends StatelessWidget {
                       ),
                     ),
 
-                    // 🔹 Cart or IR Icon (based on isMarketplace)
+                    // 🔹 Cart or IR Icon with Badge
                     GestureDetector(
                       onTap: () {
                         if (isGame) {
@@ -85,24 +84,51 @@ class CustomBottomNavBar extends StatelessWidget {
                           Navigator.pushNamed(
                             context,
                             '/cart',
-                            arguments:
-                                cartItems, // cartItems must be the actual list you are maintaining
+                            arguments: cartItems, // pass current items
                           );
                         } else {
                           Navigator.pushNamed(context, '/ir-icon');
                         }
                       },
-                      child: Image.asset(
-                        isGame
-                            ? 'assets/images/save-pro-icon.png'
-                            : isMarketplace
-                            ? 'assets/images/cart_icon.png'
-                            : 'assets/images/ir_icon.png',
-                        width: 28,
-                        height: 28,
-                        color: currentIndex == 1
-                            ? const Color(0x718D00FF)
-                            : Colors.white,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          // Icon (Cart / IR / Save Products)
+                          Image.asset(
+                            isGame
+                                ? 'assets/images/save-pro-icon.png'
+                                : isMarketplace
+                                    ? 'assets/images/cart_icon.png'
+                                    : 'assets/images/ir_icon.png',
+                            width: 28,
+                            height: 28,
+                            color: currentIndex == 1
+                                ? const Color(0x718D00FF)
+                                : Colors.white,
+                          ),
+
+                          // 🔹 Badge (Cart Count)
+                          if (isMarketplace && cartItems.isNotEmpty)
+                            Positioned(
+                              right: -6,
+                              top: -6,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Text(
+                                  '${cartItems.length}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
 

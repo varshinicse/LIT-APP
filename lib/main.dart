@@ -39,11 +39,14 @@ import 'package:lit/pages/coming_soon.dart';
 import 'package:lit/ecommerce/billing_history.dart';
 import 'package:lit/ecommerce/selection_address.dart';
 import 'package:lit/ecommerce/cart_page.dart';
-
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => NotificationProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => WishlistService()),
+        // ❌ Removed CartService (since you deleted it)
+      ],
       child: const MyApp(),
     ),
   );
@@ -89,6 +92,11 @@ class MyApp extends StatelessWidget {
             gender: args['gender'] ?? 'men',
           );
         },
+
+
+        '/signin': (context) => const SignInPage(),
+        '/signup': (context) => const SignUpPage(),
+        '/forgot_password': (context) => const ForgotPasswordPage(),
         '/game-category': (context) => const GameCategoryPage(),
         '/ir-icon': (context) => const IrIconPage(),
         '/game': (context) => const GamePage(),
@@ -115,12 +123,13 @@ class MyApp extends StatelessWidget {
         '/coming-soon': (context) => const ComingSoonPage(),
         '/billing-history': (context) => const BillingHistoryPage(),
         '/shipping-address': (context) => const ShippingAddressPage(),
+        
+        // ✅ CartPage now expects cartItems passed as arguments
         '/cart': (context) {
-          final cartItems =
-              ModalRoute.of(context)!.settings.arguments
-                  as List<Map<String, dynamic>>;
+          final cartItems = ModalRoute.of(context)!.settings.arguments as List<Map<String, dynamic>>;
           return CartPage(cartItems: cartItems);
         },
+
       },
     );
   }

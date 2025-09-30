@@ -38,6 +38,18 @@ final List<Map<String, dynamic>> allProducts = [
   },
   {
     'id': 3,
+    'image': 'assets/images/c1.jpg',
+    'brand': 'H&M',
+    'title': 'Regular Fit Cashmere Jumper',
+    'price': 3199,
+    'original': 7999,
+    'discount': '60% OFF',
+    'category': 'clothing',
+    'gender': 'men',
+    'type': 'sustainable',
+  },
+  {
+    'id': 4,
     'image': 'assets/images/b3.jpg',
     'brand': 'EcoBag',
     'title': 'Vegan Leather Tote',
@@ -49,7 +61,19 @@ final List<Map<String, dynamic>> allProducts = [
     'type': 'sustainable',
   },
   {
-    'id': 4,
+    'id': 5,
+    'image': 'assets/images/c1.jpg',
+    'brand': 'H&M',
+    'title': 'Regular Fit Cashmere Jumper',
+    'price': 3199,
+    'original': 7999,
+    'discount': '60% OFF',
+    'category': 'clothing',
+    'gender': 'men',
+    'type': 'sustainable',
+  },
+  {
+    'id': 6,
     'image': 'assets/images/s2.jpg',
     'brand': 'EcoStep',
     'title': 'Organic Slip-on Sneakers',
@@ -61,7 +85,7 @@ final List<Map<String, dynamic>> allProducts = [
     'type': 'sustainable',
   },
   {
-    'id': 5,
+    'id': 7,
     'image': 'assets/images/a1.jpg',
     'brand': 'GreenTrend',
     'title': 'Upcycled Fabric Belt',
@@ -73,7 +97,7 @@ final List<Map<String, dynamic>> allProducts = [
     'type': 'sustainable',
   },
   {
-    'id': 6,
+    'id': 8,
     'image': 'assets/images/c2.jpg',
     'brand': 'LuxeWear',
     'title': 'Silk Blend Blazer',
@@ -85,7 +109,19 @@ final List<Map<String, dynamic>> allProducts = [
     'type': 'luxury',
   },
   {
-    'id': 7,
+    'id': 9,
+    'image': 'assets/images/c3.jpg',
+    'brand': 'LuxeLine',
+    'title': 'Designer Wrap Skirt',
+    'price': 9999,
+    'original': 15999,
+    'discount': '38% OFF',
+    'category': 'clothing',
+    'gender': 'women',
+    'type': 'luxury',
+  },
+    {
+    'id': 10,
     'image': 'assets/images/c3.jpg',
     'brand': 'LuxeLine',
     'title': 'Designer Wrap Skirt',
@@ -97,7 +133,19 @@ final List<Map<String, dynamic>> allProducts = [
     'type': 'luxury',
   },
   {
-    'id': 8,
+    'id': 11,
+    'image': 'assets/images/c2.jpg',
+    'brand': 'LuxeWear',
+    'title': 'Silk Blend Blazer',
+    'price': 11999,
+    'original': 18999,
+    'discount': '35% OFF',
+    'category': 'clothing',
+    'gender': 'men',
+    'type': 'luxury',
+  },
+  {
+    'id': 12,
     'image': 'assets/images/a4.jpg',
     'brand': 'LuxeCharm',
     'title': 'Gold-Plated Hairpin Set',
@@ -112,3 +160,5 @@ final List<Map<String, dynamic>> allProducts = [
 
 List<Map<String, dynamic>> cartItems = [];
 
+// Saved items from Game page
+List<Map<String, String>> savedGameItems = [];

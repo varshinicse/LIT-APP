@@ -15,6 +15,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   int currentIndex = 1;
+  late List<Map<String, dynamic>> cartItems;
 
   @override
   void initState() {
@@ -55,115 +56,120 @@ class _CartPageState extends State<CartPage> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView(
-          children: [
-
-            const SizedBox(height: 12),
-            ...cartItems.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              return _cartItemCard(item, index);
-            }).toList(),
-
-            const SizedBox(height: 14),
-            const Divider(color: Colors.white),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: cartItems.isEmpty
+          ? const Center(
+              child: Text(
+                "Your cart is empty",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(16),
+              child: ListView(
                 children: [
-                  Row(
-                    children: [
-                      // 🔹 Coupon Icon
-                      Image.asset(
-                        'assets/images/coupon_icon.png',
-                        // Make sure this icon matches the % ticket shape in UI
-                        width: 24,
-                        height: 24,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'Apply Coupon',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
-                  ),
+                  const SizedBox(height: 12),
+                  ...cartItems.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final item = entry.value;
+                    return _cartItemCard(item, index);
+                  }).toList(),
 
-                  // 🔹 Select
-                  const Text(
-                    'Select',
-                    style: TextStyle(
-                      color: Color(0xFF7F34C3),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                  const SizedBox(height: 14),
+                  const Divider(color: Colors.white),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/coupon_icon.png',
+                              width: 24,
+                              height: 24,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 10),
+                            const Text(
+                              'Apply Coupon',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Text(
+                          'Select',
+                          style: TextStyle(
+                            color: Color(0xFF7F34C3),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  const Divider(color: Colors.white),
+                  const SizedBox(height: 10),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Order Summary',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  _summaryRow('Cart Total', 'Rs. $total'),
+                  _summaryRow('Savings', '-Rs. 900',
+                      color: Color(0xFF7F34C3)),
+                  _summaryRow('Platform Fee', 'Free'),
+                  _summaryRow('Delivery Fee', 'Free'),
+                  const Divider(color: Colors.white),
+                  _summaryRow(
+                    'Total Amount',
+                    'Rs. $total',
+                    isBold: true,
+                    fontSize: 18,
+                  ),
+                  const Divider(color: Colors.white),
+                  const SizedBox(height: 24),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Return & Exchange Policy',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Return and Exchange will be available for 7 days from the date of order of delivery',
+                    style: TextStyle(
+                      color: Colors.white54,
+                      fontSize: 12,
+                      height: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
-
-            const Divider(color: Colors.white),
-            const SizedBox(height: 10),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Order Summary',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 8),
-            _summaryRow('Cart Total', 'Rs. $total'),
-            _summaryRow('Savings', '-Rs. 900', color: Color(0xFF7F34C3)),
-            _summaryRow('Platform Fee', 'Free'),
-            _summaryRow('Delivery Fee', 'Free'),
-            const Divider(color: Colors.white),
-            _summaryRow(
-              'Total Amount',
-              'Rs. $total',
-              isBold: true,
-              fontSize: 18,
-            ),
-
-            const Divider(color: Colors.white),
-            const SizedBox(height: 24),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Return & Exchange Policy',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Return and Exchange will be available for 7 days from the date of order of delivery',
-              style: TextStyle(
-                color: Colors.white54,
-                fontSize: 12,
-                height: 1.4,
-              ),
-            ),
-            const SizedBox(height: 100),
-          ],
-        ),
-      ),
-      bottomSheet: _bottomBuyNow(total),
-
+      bottomSheet:
+          cartItems.isEmpty ? null : _bottomBuyNow(total), // hide if empty
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: currentIndex,
         onTap: (index) {
@@ -315,7 +321,8 @@ class _CartPageState extends State<CartPage> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,
-              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),

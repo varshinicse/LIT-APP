@@ -5,7 +5,7 @@ import 'package:lit/widgets/common_button.dart';
 import 'dart:ui';
 import 'dart:math' as math;
 import '../widgets/notification_bell.dart';
-import 'package:lit/data/global_data.dart';
+import 'package:lit/global_data.dart'; 
 
 
 

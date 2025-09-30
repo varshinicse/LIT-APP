@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-
-import '../../data/global_data.dart';
+import 'package:provider/provider.dart';
+import 'package:lit/global_data.dart'; 
+import 'package:lit/ecommerce/wishlist_service.dart';
 
 class ProductCard extends StatelessWidget {
   final Map<String, dynamic> product;
   final VoidCallback onBuyNow;
+  final VoidCallback? onAddToCart; // ✅ New optional parameter
 
   const ProductCard({
     super.key,
     required this.product,
     required this.onBuyNow,
+    this.onAddToCart, // ✅ Accept it
   });
 
   void addToCart(BuildContext context, Map<String, dynamic> product) {
@@ -19,7 +22,6 @@ class ProductCard extends StatelessWidget {
       const SnackBar(content: Text('Item added to cart')),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +49,35 @@ class ProductCard extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              const Positioned(
+
+              /// ❤️ Wishlist toggle
+              Positioned(
                 top: 10,
                 right: 10,
-                child: Icon(Icons.favorite_border, color: Colors.white),
+                child: Consumer<WishlistService>(
+                  builder: (context, wishlist, child) {
+                    final isFav = wishlist.contains(product);
+                    return GestureDetector(
+                      onTap: () {
+                        wishlist.toggleWishlist(product);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              isFav
+                                  ? 'Removed from Wishlist'
+                                  : 'Added to Wishlist',
+                            ),
+                            duration: const Duration(seconds: 1),
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        isFav ? Icons.favorite : Icons.favorite_border,
+                        color: isFav ? Colors.redAccent : Colors.white,
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -156,6 +183,7 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
+
                     // Add to Cart
                     Expanded(
                       child: Container(
@@ -167,9 +195,8 @@ class ProductCard extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.all(1.2),
                         child: GestureDetector(
-                          onTap: () {
-                            addToCart(context, product); // Call your cart function with product
-                          },
+                          onTap: onAddToCart ??
+                              () => addToCart(context, product), // ✅ use callback if provided
                           child: Container(
                             decoration: BoxDecoration(
                               color: const Color(0xFF1C1C1E),
@@ -192,7 +219,6 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ],
