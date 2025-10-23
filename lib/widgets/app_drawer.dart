@@ -9,6 +9,7 @@ import 'package:lit/pages/signup_page.dart';
 import 'package:lit/pages/game_entrance_page.dart';
 import 'package:lit/pages/coming_soon.dart';
 import 'package:lit/ecommerce/cart_page.dart';
+
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
 
@@ -20,12 +21,36 @@ class _AppDrawerState extends State<AppDrawer> {
   int activeIndex = -1;
 
   final List<Map<String, dynamic>> drawerItems = [
-    {'icon': Icons.videogame_asset_outlined, 'label': 'Game Modes', 'page': const GameEntrancePage()},
-    {'icon': Icons.storefront_outlined, 'label': 'Marketplace', 'page': const SustainableLuxuryPage()},
-    {'icon': Icons.people_outline, 'label': 'Socials', 'page': const ComingSoonPage()},
-    {'icon': Icons.mail_outline, 'label': 'Newsletter', 'page': const NewsletterPage()},
-    {'icon': Icons.person_pin_circle_outlined, 'label': 'Avatar Store', 'page': const ComingSoonPage()},
-    {'icon': Icons.info_outline, 'label': 'IR Icon', 'page': const ComingSoonPage()},
+    {
+      'icon': Icons.videogame_asset_outlined,
+      'label': 'Game Modes',
+      'page': const GameEntrancePage(),
+    },
+    {
+      'icon': Icons.storefront_outlined,
+      'label': 'Marketplace',
+      'page': const SustainableLuxuryPage(),
+    },
+    {
+      'icon': Icons.people_outline,
+      'label': 'Socials',
+      'page': const ComingSoonPage(),
+    },
+    {
+      'icon': Icons.mail_outline,
+      'label': 'Newsletter',
+      'page': const NewsletterPage(),
+    },
+    {
+      'icon': Icons.person_pin_circle_outlined,
+      'label': 'Avatar Store',
+      'page': const ComingSoonPage(),
+    },
+    {
+      'icon': Icons.info_outline,
+      'label': 'IR Icon',
+      'page': const ComingSoonPage(),
+    },
   ];
 
   @override
@@ -44,7 +69,7 @@ class _AppDrawerState extends State<AppDrawer> {
               filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(255, 255, 255, 0.06), // rgba(255,255,255,0.06)
+                  color: const Color.fromRGBO(255, 255, 255, 0.06),
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(16),
                     bottomRight: Radius.circular(16),
@@ -53,7 +78,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     BoxShadow(
                       color: Colors.black.withOpacity(0.1),
                       blurRadius: 30,
-                      offset: const Offset(0, 4), // x, y
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
@@ -95,7 +120,10 @@ class _AppDrawerState extends State<AppDrawer> {
                           SizedBox(height: 4),
                           Text(
                             'jane.anderson@email.com',
-                            style: TextStyle(color: Colors.white70, fontSize: 12),
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
@@ -126,8 +154,14 @@ class _AppDrawerState extends State<AppDrawer> {
                     },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
-                      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
                       decoration: BoxDecoration(
                         color: isActive
                             ? Colors.purpleAccent.withOpacity(0.25)
@@ -149,8 +183,9 @@ class _AppDrawerState extends State<AppDrawer> {
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
-                              fontWeight:
-                              isActive ? FontWeight.bold : FontWeight.normal,
+                              fontWeight: isActive
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
                             ),
                           ),
                         ],
@@ -164,8 +199,14 @@ class _AppDrawerState extends State<AppDrawer> {
 
                 // Settings Option
                 ListTile(
-                  leading: const Icon(Icons.settings_outlined, color: Colors.white),
-                  title: const Text('Settings', style: TextStyle(color: Colors.white)),
+                  leading: const Icon(
+                    Icons.settings_outlined,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    'Settings',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onTap: () => Navigator.pushNamed(context, '/settings'),
                 ),
               ],

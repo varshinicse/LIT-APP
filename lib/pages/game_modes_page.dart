@@ -432,6 +432,8 @@ class _GameModeCard extends StatelessWidget {
 
 // Audio Settings Dialog
 
+// Audio Settings Dialog
+
 class _AudioSettingsPopup extends StatefulWidget {
   const _AudioSettingsPopup();
 
@@ -570,7 +572,10 @@ class _AudioSettingsPopupState extends State<_AudioSettingsPopup> {
                               _settingsPill(
                                 icon: Icons.headset_mic_outlined,
                                 label: 'Help And Support',
-                                onTap: () {},
+                                onTap: () {
+                                   Navigator.of(context).pop(); // close popup first
+                                   Navigator.pushNamed(context, '/help-and-support');   
+                                },
                               ),
                             ],
                           ),
