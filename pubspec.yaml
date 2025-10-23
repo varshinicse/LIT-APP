@@ -78,7 +78,7 @@ flutter:
     - assets/images/amazonpay.png
     - assets/images/circle-check-solid-full.svg
     - assets/images/Vector.png
-    - assets/images/robo.svg
+    - assets/images/robo.png
     
     - assets/images/d5.jpg
     - assets/images/d6.jpg
@@ -125,6 +125,7 @@ flutter:
     - assets/images/fire2.png
     - assets/images/fire3.png
     - assets/images/fire4.png
+    - assets/images/streaks.png
     - assets/images/shoe1.png
     - assets/images/shoe2.png
     - assets/images/india-flag.png
@@ -160,8 +161,7 @@ flutter:
     - assets/images/lives4.png
     - assets/images/notification.wav
     - assets/images/Rectangle.png
-    - assets/images/user.png
-    - assets/images/check (1).png
+    - assets/images/Vector-2.png
     - assets/images/save-pro-icon.png
     - assets/images/trash.svg
     - assets/images/clap.png

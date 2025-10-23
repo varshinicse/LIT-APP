@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lit/payment/payment_gateway_page.dart';
 import 'package:lit/widgets/app_drawer.dart';
 import 'package:lit/widgets/notification_bell.dart';
@@ -163,8 +162,8 @@ class PaymentFailurePage extends StatelessWidget {
                       builder: (context, constraints) {
                         final double maxW = constraints.maxWidth;
                         return Center(
-                          child: SvgPicture.asset(
-                            'assets/images/robo.svg',
+                          child: Image.asset(
+                            'assets/images/robo.png',
                             width: maxW - 24,
                             fit: BoxFit.contain,
                             alignment: Alignment.center,

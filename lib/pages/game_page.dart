@@ -426,7 +426,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: _selectedOption != null ? 180 : 88,
+                bottom: _selectedOption != null ? 150 : 110,
                 child: Center(
                   child: Text(
                     "00:${secondsRemaining.toString().padLeft(2, '0')}",
@@ -444,7 +444,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 120,
+                bottom: 56,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -469,27 +469,32 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                 ),
               ),
             if (_selectedOption == null)
-              Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _ActionButton(
-              label: "Hint",
-              onPressed: () => _showSkipDialog(
-                context,
-                "Are you sure you want a hint?",
-                "Hint 5",
-              ),
-            ),
-            const SizedBox(width: 16),
-            _ActionButton(
-              label: "Skip",
-              onPressed: () => _showSkipDialog(
-                context,
-                "Are you sure you want to skip?",
-                "Skip 5",
-              ),
-            ),
-          ],
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 36,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _ActionButton(
+                      label: "Hint",
+                      onPressed: () => _showSkipDialog(
+                        context,
+                        "Are you sure you want a hint?",
+                        "Hint 5",
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    _ActionButton(
+                      label: "Skip",
+                      onPressed: () => _showSkipDialog(
+                        context,
+                        "Are you sure you want to skip?",
+                        "Skip 5",
+                      ),
+                    ),
+                  ],
+                ),
               ),
           ],
         ),
@@ -872,7 +877,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     );
   }
 
-
   void _showExitConfirmation(BuildContext context) {
     showDialog(
       context: context,
@@ -1032,11 +1036,95 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       context: context,
       barrierDismissible: true,
       builder: (context) {
-        return StreakDialog(
-          avatarPath: 'assets/images/avatar.jpg',
-          username: 'LuxuryinTaste',
-          userTier: 'Beginner',
-          streakDays: _streakDays,
+        final size = MediaQuery.of(context).size;
+        final double maxW = 420;
+        final double dialogWidth = math.min(size.width * 0.9, maxW);
+        final double dialogHeight = math.min(size.height * 0.72, 520);
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
+          child: Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Container(
+                  width: dialogWidth,
+                  height: dialogHeight,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    color: Colors.white.withOpacity(0.08),
+                    border: Border.all(color: Colors.white.withOpacity(0.25), width: 1),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.35),
+                        blurRadius: 24,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                    gradient: const RadialGradient(
+                      center: Alignment(0.0, -0.3),
+                      radius: 1.2,
+                      colors: [
+                        Color.fromRGBO(255, 255, 255, 0.10),
+                        Color.fromRGBO(255, 255, 255, 0.03),
+                      ],
+                    ),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Soft overlay to blend content further
+                      Positioned.fill(
+                        child: IgnorePointer(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.white.withOpacity(0.04),
+                                  Colors.white.withOpacity(0.02),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: FittedBox(
+                          child: Image.asset(
+                            'assets/images/streaks.png',
+                            width: dialogWidth * 0.9,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: -6,
+                        right: -6,
+                        child: GestureDetector(
+                          onTap: () => Navigator.of(context).pop(),
+                          child: SizedBox(
+                            width: 64,
+                            height: 64,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Image.asset('assets/images/Rectangle.png', width: 64, height: 64),
+                                const Icon(Icons.close, color: Colors.white, size: 22),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         );
       },
     );
@@ -1840,252 +1928,7 @@ class _RewardIconState extends State<_RewardIcon> with SingleTickerProviderState
   }
 }
 
-/// --- IMPROVED STREAK DIALOG DESIGN ---
-/// GOAL: Match the second image reference (bigger flames, clear fadefire background, balanced layout)
-/// NOTE: Keep the rest of GamePage unchanged.
-
-class StreakDialog extends StatefulWidget {
-  final String avatarPath;
-  final String username;
-  final String userTier;
-  final int streakDays;
-
-  const StreakDialog({
-    Key? key,
-    required this.avatarPath,
-    required this.username,
-    required this.userTier,
-    required this.streakDays,
-  }) : super(key: key);
-
-  @override
-  State<StreakDialog> createState() => _StreakDialogState();
-}
-
-class _StreakDialogState extends State<StreakDialog>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _entryController;
-  late Animation<double> _scaleAnim;
-  late Animation<double> _fadeAnim;
-
-  @override
-  void initState() {
-    super.initState();
-    _entryController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 380),
-    );
-    _scaleAnim = Tween<double>(begin: 0.95, end: 1.0).animate(
-      CurvedAnimation(parent: _entryController, curve: Curves.easeOutBack),
-    );
-    _fadeAnim =
-        CurvedAnimation(parent: _entryController, curve: Curves.easeInOut);
-    _entryController.forward();
-  }
-
-  @override
-  void dispose() {
-    _entryController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final double dialogWidth = math.min(MediaQuery.of(context).size.width * 0.86, 380.0);
-
-    return Center(
-      child: FadeTransition(
-        opacity: _fadeAnim,
-        child: ScaleTransition(
-          scale: _scaleAnim,
-          child: Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
-            children: [
-              // 🔹 Background blurred layer
-              ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-                  child: Container(
-                    width: dialogWidth,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 22, horizontal: 18),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      color: Colors.white.withOpacity(0.08),
-                      border: Border.all(color: Colors.white.withOpacity(0.25), width: 1.2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.4),
-                          blurRadius: 20,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
-                    ),
-                    child: DefaultTextStyle.merge(
-                      style: const TextStyle(
-                        decoration: TextDecoration.none,
-                        decorationColor: Colors.transparent,
-                      ),
-                      child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        // 🔸 Faded fire texture behind everything
-                        Positioned.fill(
-                          child: IgnorePointer(
-                            child: Opacity(
-                              opacity: 0.25,
-                              child: Image.asset(
-                                'assets/images/fadefire.png',
-                                fit: BoxFit.cover,
-                                alignment: Alignment.center,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // 🔥 EDGE FLAMES (use specific assets per side)
-                        // Left side: fire1 (top), fire2 (bottom)
-                        _flame(asset: 'assets/images/fire1.png', left: -42, top: 30, angle: -0.2, size: 110),
-                        _flame(asset: 'assets/images/fire2.png', left: -46, bottom: -12, angle: 0.15, size: 120),
-                        // Right side: fire3 (top), fire4 (bottom)
-                        _flame(asset: 'assets/images/fire3.png', right: -42, top: 28, angle: 0.2, size: 110),
-                        _flame(asset: 'assets/images/fire4.png', right: -48, bottom: -14, angle: -0.15, size: 120),
-
-                        // 🧱 CONTENT
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              children: [
-                                ClipOval(
-                                  child: Image.asset(
-                                    widget.avatarPath,
-                                    width: 38,
-                                    height: 38,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      widget.username,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      widget.userTier,
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
-
-                            // 🔹 STREAK DAYS
-                            Text(
-                              '${widget.streakDays}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 72,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Text(
-                              'DAYS',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 3,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            const Text(
-                              "You're On A Streak",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 300),
-                              child: const Text(
-                                'Your Consistency Is Unmatched — And We Notice.\nKeep The Streak Alive And Hit 30 For A Surprise Reward',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 13,
-                                  height: 1.4,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-
-                            const Text(
-                              'Next Milestone : 30 Days',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        // ❌ CLOSE BUTTON (same as Figma)
-                        Positioned(
-                          top: -10,
-                          right: -10,
-                          child: GestureDetector(
-                            onTap: () => Navigator.of(context).pop(),
-                            child: SizedBox(
-                              width: 42,
-                              height: 42,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/Rectangle.png',
-                                    width: 42,
-                                    height: 42,
-                                    fit: BoxFit.contain,
-                                  ),
-                                  const Icon(Icons.close,
-                                      size: 18, color: Colors.white),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// --- 🔥 FLAME BUILDER (with flicker + proper scale) ---
+/// --- 🔥 FLAME BUILDER (with flicker + proper scale) ---
   Widget _flame({
     double? left,
     double? right,
@@ -2094,6 +1937,8 @@ class _StreakDialogState extends State<StreakDialog>
     double angle = 0,
     String asset = 'assets/images/fire.png',
     double size = 100,
+    bool glow = true,
+    double opacity = 1.0,
   }) {
     return Positioned(
       left: left,
@@ -2104,27 +1949,31 @@ class _StreakDialogState extends State<StreakDialog>
         child: Transform.rotate(
           angle: angle,
           child: Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.orange.withOpacity(0.5),
-                  blurRadius: 25,
-                  spreadRadius: 10,
-                ),
-              ],
-            ),
-            child: Image.asset(
-              asset,
-              width: size,
-              height: size,
-              fit: BoxFit.contain,
+            decoration: glow
+                ? BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.orange.withOpacity(0.45),
+                        blurRadius: 22,
+                        spreadRadius: 8,
+                      ),
+                    ],
+                  )
+                : const BoxDecoration(),
+            child: Opacity(
+              opacity: opacity,
+              child: Image.asset(
+                asset,
+                width: size,
+                height: size,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ),
       ),
     );
   }
-}
 
 /// --- Flicker Animation for Flames ---
 class _FlameFlicker extends StatefulWidget {

@@ -436,7 +436,7 @@ class _FriendListPageState extends State<FriendListPage> {
                               color: Colors.white, fontSize: 22),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 18),
                         CircleAvatar(radius: 62, backgroundImage: AssetImage(imagePath)),
                         const SizedBox(height: 22),
                         const Text(
@@ -868,11 +868,7 @@ class _FriendListPageState extends State<FriendListPage> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8),
-                              child: Image.asset(
-                                'assets/images/close.png',
-                                fit: BoxFit.contain,
-                                color: Colors.white,
-                              ),
+                              child: const Icon(Icons.close, color: Colors.white),
                             ),
                           ),
                         ),
@@ -1545,9 +1541,37 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
     {'name': 'Liya James', 'avatar': 'assets/images/avatar6.jpg'},
     {'name': 'Gamer65', 'avatar': 'assets/images/avatar7.jpg'},
   ];
-  final TextEditingController _search = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  bool isSearching = false;
 
-  void _showProfileDialog(Map<String, String> player) {
+  void _showSettingsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF2D0C4B).withOpacity(0.9),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text(
+            'Settings',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          content: const Text(
+            'Settings content goes here.',
+            style: TextStyle(color: Colors.white70),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+   void _showPlayerPopup(BuildContext context, Map<String, dynamic> player) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -1576,25 +1600,252 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                       ),
                       border: Border.all(color: Colors.white.withOpacity(0.15)),
                     ),
-                    child: Row(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(backgroundImage: AssetImage(player['avatar']!), radius: 28),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: AssetImage(player['avatar']),
+                              radius: 26,
+                            ),
+                            const SizedBox(width: 12),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      player['name'],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Icon(Icons.person_add_alt_1,
+                                        size: 18, color: Colors.white),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Beginner",
+                                      style: TextStyle(
+                                          color: Colors.white70, fontSize: 12),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    CircleAvatar(
+                                      radius: 8,
+                                      backgroundImage: AssetImage(
+                                          'assets/images/india-flag.png'),
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        IntrinsicHeight(
+                          child: Row(
                             children: [
-                              Text(
-                                player['name']!,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                              Expanded(
+                                flex: 6,
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromRGBO(255, 255, 255, 0.03),
+                                    border: Border.all(color: Color(0xFF8A6FCF), width: 0.5),
+                                    borderRadius: BorderRadius.circular(12),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: const Color(0x59CFCFCF).withOpacity(0.1),
+                                        offset: const Offset(0, 1),
+                                      ),
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        blurRadius: 30,
+                                        offset: const Offset(2, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Player Stats",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12,
+                                            color: Colors.white),
+                                      ),
+                                      const Divider(
+                                        color: Color(0xFF8A6FCF),
+                                        thickness: 0.4,
+                                        height: 10,
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: const [
+                                          _StatColumn(
+                                            value: "16",
+                                            label: "Games Played",
+                                            valueColor: Color(0xFFA46BF5),
+                                          ),
+                                          _StatColumn(
+                                            value: "21",
+                                            label: "Games won",
+                                            valueColor: Color(0xFFA46BF5),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              const Text('Beginner', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                flex: 5,
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromRGBO(255, 255, 255, 0.03),
+                                    border: Border.all(color: Color(0xFF8A6FCF), width: 0.5),
+                                    borderRadius: BorderRadius.circular(12),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: const Color(0x59CFCFCF).withOpacity(0.1),
+                                        offset: const Offset(0, 1),
+                                      ),
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        blurRadius: 30,
+                                        offset: const Offset(2, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Badges",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12,
+                                            color: Colors.white),
+                                      ),
+                                      const Divider(
+                                        color: Color(0xFF8A6FCF),
+                                        thickness: 0.4,
+                                        height: 10,
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/amature-badge.png',
+                                            width: 50,
+                                            height: 50,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: const [
+                                              Text(
+                                                "Amature",
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Color(0xFFA46BF5),
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              Text(
+                                                "2803",
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Color(0xFFA46BF5),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(255, 255, 255, 0.03),
+                            border: Border.all(color: Color(0xFF8A6FCF), width: 0.5),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0x59CFCFCF).withOpacity(0.1),
+                                offset: const Offset(0, 1),
+                              ),
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 30,
+                                offset: const Offset(2, 2),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Achievements",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const Divider(
+                                color: Color(0xFF8A6FCF),
+                                thickness: 0.4,
+                                height: 10,
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  _AchievementBox(
+                                    icon: Icons.shopping_bag,
+                                    label: "Bags",
+                                    value: "33/40",
+                                  ),
+                                  _AchievementBox(
+                                    icon: Icons.snowshoeing,
+                                    label: "Footwear",
+                                    value: "33/40",
+                                  ),
+                                  _AchievementBox(
+                                    icon: Icons.checkroom,
+                                    label: "Clothing",
+                                    value: "33/40",
+                                  ),
+                                  _AchievementBox(
+                                    icon: Icons.watch,
+                                    label: "Accessories",
+                                    value: "33/40",
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -1604,16 +1855,18 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                 ),
               ),
               Positioned(
-                top: 6,
-                right: 6,
+                top: 3,
+                right: 3,
                 child: GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image.asset('assets/images/Rectangle.png', width: 36, height: 36),
-                      const Icon(Icons.close, size: 16, color: Colors.white),
-                    ],
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF2D0C4B),
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: const Icon(Icons.close,
+                        size: 16, color: Color(0xffD9BFFF)),
                   ),
                 ),
               ),
@@ -1684,11 +1937,7 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Image.asset(
-                      'assets/images/close.png',
-                      fit: BoxFit.contain,
-                      color: Colors.white,
-                    ),
+                    child: const Icon(Icons.close, color: Colors.white),
                   ),
                 ),
               ),
@@ -1706,10 +1955,11 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
   @override
   Widget build(BuildContext context) {
     final filtered = suggestions
-        .where((n) => n['name']!.toLowerCase().contains(_search.text.toLowerCase()))
+        .where((n) => n['name']!.toLowerCase().contains(_searchController.text.toLowerCase()))
         .toList();
 
     return Scaffold(
+      drawer: const AppDrawer(),
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
@@ -1720,40 +1970,120 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Spacer(),
-                      Image.asset('assets/images/logo.png', height: 36),
-                      const Spacer(),
-                      const Icon(Icons.notifications, color: Colors.white),
-                    ],
+                  child: Builder(
+                    builder: (ctx) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.menu, color: Colors.white),
+                          onPressed: () => Scaffold.of(ctx).openDrawer(),
+                        ),
+                        Image.asset('assets/images/logo.png', height: 40),
+                        const NotificationBell(),
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                Text('FRIENDS', style: GoogleFonts.kronaOne(color: Colors.white, letterSpacing: 4, fontSize: 18)),
-                const SizedBox(height: 16),
+                const SizedBox(height: 6),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            "Back",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Text('FRIENDS', style: GoogleFonts.kronaOne(color: Colors.white, letterSpacing: 6, fontSize: 20)),
+                const SizedBox(height: 28),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: const Color(0xFF6B21A8),
+                          border: Border.all(color: const Color(0xFF9333EA)),
+                        ),
+                        child: const Text('Friend List', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.transparent,
+                        border: Border.all(color: const Color(0xFF9333EA)),
+                      ),
+                      child: const Text('Pending Request', style: TextStyle(color: Color(0xFFBFA9DD), fontWeight: FontWeight.w600)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 18),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: const Color(0x569333EA)),
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: const Color(0x569333EA), width: 1),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        const Icon(Icons.search, color: Color(0xFFBFA9DD), size: 20),
-                        const SizedBox(width: 8),
+                        GestureDetector(
+                          onTap: () {
+                            if (isSearching) {
+                              setState(() {
+                                _searchController.clear();
+                                isSearching = false;
+                              });
+                            } else {
+                              setState(() {
+                                isSearching = true;
+                              });
+                            }
+                          },
+                          child: Icon(
+                            isSearching ? Icons.arrow_back : Icons.search,
+                            color: const Color(0xFFBFA9DD),
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: TextField(
-                            controller: _search,
+                            controller: _searchController,
                             onChanged: (_) => setState(() {}),
-                            decoration: const InputDecoration(hintText: 'Search', border: InputBorder.none),
                             style: const TextStyle(color: Colors.white),
+                            decoration: const InputDecoration(
+                              hintText: 'Search',
+                              hintStyle: TextStyle(color: Color(0xFFBFA9DD)),
+                              border: InputBorder.none,
+                              isCollapsed: true,
+                            ),
                           ),
                         ),
                       ],
@@ -1765,7 +2095,7 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     itemCount: filtered.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    separatorBuilder: (_, __) => const SizedBox(height: 16),
                     itemBuilder: (_, i) {
                       final name = filtered[i]['name']!;
                       final avatar = filtered[i]['avatar']!;
@@ -1781,15 +2111,17 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                 if (parent != null) {
                                   parent._showPlayerPopup(context, {'name': name, 'avatar': avatar});
                                 } else {
-                                  _showProfileDialog({'name': name, 'avatar': avatar});
+                                  _showPlayerPopup(context, {'name': name, 'avatar': avatar});
                                 }
                               },
                               child: Text(
                                 name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ),
@@ -1811,7 +2143,7 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                 });
                               }
                             },
-                            child: Image.asset('assets/images/user.png', width: 22, height: 22),
+                            child: Image.asset('assets/images/Vector-2.png', width: 22, height: 22),
                           ),
                         ],
                       );

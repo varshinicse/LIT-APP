@@ -40,6 +40,7 @@ import 'package:lit/ecommerce/billing_history.dart';
 import 'package:lit/ecommerce/selection_address.dart';
 import 'package:lit/ecommerce/cart_page.dart';
 import 'package:lit/ecommerce/payment_page.dart';
+import 'package:lit/ecommerce/buy_now_page.dart';
 import 'package:lit/payment/payment_success_page.dart';
 import 'package:lit/payment/order_confirmation_page.dart';
 import 'package:lit/payment/payment_failure_page.dart';
@@ -94,6 +95,17 @@ class MyApp extends StatelessWidget {
             type: args['type'] ?? 'sustainable',
             gender: args['gender'] ?? 'men',
           );
+        },
+
+        '/buy-now': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments;
+          Map<String, dynamic> item = const {};
+          if (args is Map<String, dynamic>) {
+            item = args;
+          } else if (args is Map) {
+            item = Map<String, dynamic>.from(args as Map);
+          }
+          return BuyNowPage(item: item);
         },
 
 
