@@ -269,7 +269,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           TextButton(
                                             onPressed: () {
                                               Navigator.of(context).pop();
-                                              Navigator.pushReplacementNamed(context, '/login');
+                                              Navigator.pushReplacementNamed(context, '/signin');
                                             },
                                             style: TextButton.styleFrom(
                                               foregroundColor: Colors.redAccent,

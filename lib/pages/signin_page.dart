@@ -1,16 +1,60 @@
-import 'package:flutter/material.dart';
-import 'signup_page.dart';
-import 'forgot_password_page.dart';
+// ignore_for_file: use_build_context_synchronously
 
-class SignInPage extends StatelessWidget {
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:lit/screens/main_layout.dart';
+import 'package:lit/screens/home/home_page.dart';
+// ✅ Add this import for navigation
+
+class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
 
   @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  bool _showFacebookPopup = false;
+
+  // ---------------- GOOGLE SIGN-IN ----------------
+  Future<void> _handleGoogleSignIn(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        messenger.showSnackBar(
+          const SnackBar(content: Text('Google sign-in cancelled')),
+        );
+        return;
+      }
+      messenger.showSnackBar(
+        SnackBar(content: Text('Signed in as ${googleUser.email}')),
+      );
+
+      // ✅ After Google sign-in, go to HomePage
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+
+    } catch (error) {
+      messenger.showSnackBar(
+        SnackBar(content: Text('Google Sign-In failed: $error')),
+      );
+    }
+  }
+
+  // ---------------- UI ----------------
+  @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Stack(
+        alignment: Alignment.center,
         children: [
-          // Background image
+          // 🔹 Background
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -19,57 +63,36 @@ class SignInPage extends StatelessWidget {
               ),
             ),
           ),
+          Container(color: Colors.black.withOpacity(0.65)),
 
-          // Black transparent overlay
-          Container(
-            color: Colors.black.withOpacity(0.6),
-          ),
-
-          // Content
+          // 🔹 Content
           SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 60),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 15),
-                SizedBox(
-                  height: 90,
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: Image.asset('assets/images/logo.png'),
-                  ),
-                ),
+                Image.asset('assets/images/logo.png', height: 100),
+                const SizedBox(height: 30),
 
-                const SizedBox(height: 20),
                 const Text(
                   'SIGN IN',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 10),
                 const Text(
-                  'Sign in with email address',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                  'Sign in with your email address',
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 40),
 
-
-
-                // Email
                 _buildInputField(hint: 'Yourname@gmail.com', icon: Icons.email),
-                const SizedBox(height: 16),
-
-                // Password (with toggle)
+                const SizedBox(height: 18),
                 const _PasswordField(),
-                const SizedBox(height: 1),
 
-                // Forgot password
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -78,61 +101,27 @@ class SignInPage extends StatelessWidget {
                     },
                     child: const Text(
                       'Forgot Password?',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 20),
 
-                // Sign in button
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: const RadialGradient(
-                      center: Alignment(0.08, 0.08),
-                      radius: 7.98,
-                      colors: [
-                        Color.fromRGBO(0, 0, 0, 0.8),
-                        Color.fromRGBO(147, 51, 234, 0.4),
-                      ],
-                      stops: [0.0, 0.5],
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x66000000),
-                        offset: Offset(0, 4),
-                        blurRadius: 4,
-                      ),
-                    ],
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: const Text(
-                      'Sign in',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+                // ✅ When pressing "Sign In", go to Home Page
+                _gradientButton("Sign In", () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MainLayout()),
+                  );
+                }),
 
-                const SizedBox(height: 10),
-                // Already have account
+                const SizedBox(height: 20),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Don't have an Account? ",
+                      "Don’t have an Account? ",
                       style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                     GestureDetector(
@@ -140,9 +129,9 @@ class SignInPage extends StatelessWidget {
                         Navigator.pushNamed(context, '/signup');
                       },
                       child: const Text(
-                        "Sign up",
+                        "Sign Up",
                         style: TextStyle(
-                          color: Color.fromRGBO(147, 51, 234, 0.89),
+                          color: Color.fromRGBO(147, 51, 234, 0.9),
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -152,7 +141,6 @@ class SignInPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
 
-                // Divider
                 Row(
                   children: const [
                     Expanded(child: Divider(color: Colors.white38)),
@@ -168,46 +156,155 @@ class SignInPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                // Social buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _socialButton("Google", "assets/images/google.png"),
+                    _socialButton(
+                      "Google",
+                      "assets/images/google.png",
+                      onTap: () => _handleGoogleSignIn(context),
+                    ),
                     const SizedBox(width: 20),
-                    _socialButton("Facebook", "assets/images/facebook.png"),
+                    _socialButton(
+                      "Facebook",
+                      "assets/images/facebook.png",
+                      onTap: () => setState(() {
+                        _showFacebookPopup = true;
+                      }),
+                    ),
                   ],
-                ),
-                const SizedBox(height: 30),
-
-                // Bottom terms
-                const Text.rich(
-                  TextSpan(
-                    text: "By continuing, including through our platform partners, you agree to our ",
-                    style: TextStyle(color: Colors.white70, fontSize: 10),
-                    children: [
-                      TextSpan(
-                        text: "User Agreement ",
-                        style: TextStyle(color: Color.fromRGBO(147, 51, 234, 0.89)),
-                      ),
-                      TextSpan(
-                          text:
-                          "(including class action wavier and arbitration provisions) and acknowledge our "),
-                      TextSpan(
-                        text: "Privacy Policy.",
-                        style: TextStyle(color: Color.fromRGBO(147, 51, 234, 0.89)),
-                      ),
-                    ],
-                  ),
-                  textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
+
+          // 🔹 Facebook Popup (same as before)
+          if (_showFacebookPopup) ...[
+            GestureDetector(
+              onTap: () => setState(() => _showFacebookPopup = false),
+              child: Container(color: Colors.black.withOpacity(0.6)),
+            ),
+            Positioned(
+              top: screenHeight * 0.34,
+              child: AnimatedOpacity(
+                opacity: _showFacebookPopup ? 1 : 0,
+                duration: const Duration(milliseconds: 250),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        style: const TextStyle(color: Colors.black87),
+                        cursorColor: Colors.grey.shade700,
+                        decoration: InputDecoration(
+                          hintText: 'Email address or phone number',
+                          hintStyle: const TextStyle(color: Colors.black54),
+                          filled: true,
+                          fillColor: Colors.grey.shade200,
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        obscureText: true,
+                        style: const TextStyle(color: Colors.black87),
+                        cursorColor: Colors.grey.shade700,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          hintStyle: const TextStyle(color: Colors.black54),
+                          filled: true,
+                          fillColor: Colors.grey.shade200,
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() => _showFacebookPopup = false);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Facebook login simulated')),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1877F2),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          child: const Text(
+                            'Log in',
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Forgotten Password?',
+                          style: TextStyle(color: Color(0xFF1877F2), fontSize: 14),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        height: 1,
+                        color: Colors.grey.shade300,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() => _showFacebookPopup = false);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('New Facebook account simulated')),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF42B72A),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          child: const Text(
+                            'Create new account',
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
 
+  // ---------------- Reusable Widgets ----------------
   Widget _buildInputField({
     required String hint,
     required IconData icon,
@@ -216,14 +313,14 @@ class SignInPage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
         obscureText: isPassword,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(color: Colors.white54),
+          hintStyle: const TextStyle(color: Colors.white54, fontSize: 14),
           prefixIcon: Icon(icon, color: Colors.white70),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(vertical: 16),
@@ -232,59 +329,85 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  Widget _socialButton(String label, String iconPath) {
+  Widget _gradientButton(String text, VoidCallback onTap) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white10,
-        borderRadius: BorderRadius.circular(12),
+        gradient: const LinearGradient(
+          colors: [
+            Color.fromRGBO(147, 51, 234, 0.9),
+            Color.fromRGBO(0, 0, 0, 0.85)
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: Row(
-        children: [
-          Image.asset(iconPath, height: 20),
-          const SizedBox(width: 8),
-          Text(label, style: const TextStyle(color: Colors.white)),
-        ],
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+      ),
+    );
+  }
+
+  Widget _socialButton(String label, String iconPath, {required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 22),
+        decoration: BoxDecoration(
+          color: Colors.white10,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Row(
+          children: [
+            Image.asset(iconPath, height: 22),
+            const SizedBox(width: 8),
+            Text(label, style: const TextStyle(color: Colors.white, fontSize: 14)),
+          ],
+        ),
       ),
     );
   }
 }
 
-// ✅ Password field with toggle logic
+// ---------------- Password Field ----------------
 class _PasswordField extends StatefulWidget {
   const _PasswordField({super.key});
-
   @override
   State<_PasswordField> createState() => _PasswordFieldState();
 }
 
 class _PasswordFieldState extends State<_PasswordField> {
   bool _obscure = true;
-
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
         obscureText: _obscure,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: 'Password',
-          hintStyle: const TextStyle(color: Colors.white54),
+          hintStyle: const TextStyle(color: Colors.white54, fontSize: 14),
           prefixIcon: const Icon(Icons.lock, color: Colors.white70),
           suffixIcon: IconButton(
-            icon: Icon(
-              _obscure ? Icons.visibility_off : Icons.visibility,
-              color: Colors.white70,
-            ),
-            onPressed: () {
-              setState(() {
-                _obscure = !_obscure;
-              });
-            },
+            icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility, color: Colors.white70),
+            onPressed: () => setState(() => _obscure = !_obscure),
           ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(vertical: 16),

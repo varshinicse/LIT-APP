@@ -3,10 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lit/widgets/app_drawer.dart';
 import 'package:lit/widgets/common_button.dart';
+import 'package:provider/provider.dart';
+import 'package:lit/ecommerce/cart_service.dart';
 import 'package:lit/pages/category_page.dart';
 import 'package:lit/ecommerce/wishlist_service.dart';
 import '../ecommerce/wishlist_page.dart';
 import '../ecommerce/buy_now_page.dart';
+import 'package:lit/global_data.dart'; // <-- added so cartItems is available
 
 class SustainableStorePage extends StatefulWidget {
   const SustainableStorePage({super.key});
@@ -104,6 +107,7 @@ class _SustainableStorePageState extends State<SustainableStorePage> {
 
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartService>(context); // ✅ Watch cart updates
     final List<Map<String, dynamic>> allFreshArrivals = [
       {
         'image': 'assets/images/fa2.jpg',
@@ -363,8 +367,8 @@ class _SustainableStorePageState extends State<SustainableStorePage> {
 
     List<Map<String, dynamic>> filteredArrivals = allFreshArrivals
         .where((item) =>
-    _selectedCategory == 'All Products' ||
-        item['category'] == _selectedCategory)
+            _selectedCategory == 'All Products' ||
+            item['category'] == _selectedCategory)
         .toList();
 
     if (_selectedSort == 'Price: Low to High') {
@@ -598,19 +602,19 @@ class _SustainableStorePageState extends State<SustainableStorePage> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(item['brand'], style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                                      Text(item['brand'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
                                       const SizedBox(height: 4),
-                                      Text(item['title'], style: TextStyle(color: Colors.white, fontSize: 13, height: 1.2)),
+                                      Text(item['title'], style: const TextStyle(color: Colors.white, fontSize: 13, height: 1.2)),
                                       const SizedBox(height: 8),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Rs. ${item['price']}', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                                          Text(item['discount'], style: TextStyle(color: Color(0xFF9333EA), fontWeight: FontWeight.bold, fontSize: 14)),
+                                          Text('Rs. ${item['price']}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                                          Text(item['discount'], style: const TextStyle(color: Color(0xFF9333EA), fontWeight: FontWeight.bold, fontSize: 14)),
                                         ],
                                       ),
                                       const SizedBox(height: 4),
-                                      Text('Rs. ${item['original']}', style: TextStyle(color: Colors.white54, fontSize: 13, decoration: TextDecoration.lineThrough)),
+                                      Text('Rs. ${item['original']}', style: const TextStyle(color: Colors.white54, fontSize: 13, decoration: TextDecoration.lineThrough)),
                                       const SizedBox(height: 10),
                                       Row(
                                         children: [
@@ -656,26 +660,43 @@ class _SustainableStorePageState extends State<SustainableStorePage> {
                                             ),
                                           ),
                                           const SizedBox(width: 10),
+
+                                          // <-- ONLY change: add onTap that adds to cartItems and SnackBar
                                           Expanded(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(18),
-                                                gradient: const LinearGradient(
-                                                  colors: [Color(0xFF9333EA), Color(0xFF6B21A8)],
-                                                ),
-                                              ),
-                                              padding: const EdgeInsets.all(1.5), // border thickness
+                                            child: GestureDetector(
+                                              onTap: () {
+  cart.add(item); // ✅ Uses CartService for reactive update
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Colors.white, // ✅ white box
+      content: Text(
+        '${item['title']} added to cart',
+        style: const TextStyle(color: Colors.black),
+      ),
+      duration: const Duration(seconds: 1),
+    ),
+  );
+},
                                               child: Container(
                                                 decoration: BoxDecoration(
-                                                  color: const Color(0xFF1C1C1E), // match your card's background to blend in
-                                                  borderRadius: BorderRadius.circular(17),
+                                                  borderRadius: BorderRadius.circular(18),
+                                                  gradient: const LinearGradient(
+                                                    colors: [Color(0xFF9333EA), Color(0xFF6B21A8)],
+                                                  ),
                                                 ),
-                                                child: const Center(
-                                                  child: Padding(
-                                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                                    child: Text(
-                                                      'Add to Cart',
-                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                                                padding: const EdgeInsets.all(1.5), // border thickness
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: const Color(0xFF1C1C1E), // match your card's background to blend in
+                                                    borderRadius: BorderRadius.circular(17),
+                                                  ),
+                                                  child: const Center(
+                                                    child: Padding(
+                                                      padding: EdgeInsets.symmetric(vertical: 8),
+                                                      child: Text(
+                                                        'Add to Cart',
+                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -699,7 +720,7 @@ class _SustainableStorePageState extends State<SustainableStorePage> {
 // Right after the SizedBox(height: 16), that wraps the Fresh Arrivals ListView
 
 
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
 // === New Section: Big Savings For You ===
                     Text(
@@ -716,7 +737,7 @@ class _SustainableStorePageState extends State<SustainableStorePage> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       childAspectRatio: 0.75,
                       children: List.generate(4, (index) {
                         final products = [

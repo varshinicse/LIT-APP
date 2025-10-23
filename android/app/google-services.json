@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "809614805911",
+    "project_id": "litapp-81fc2",
+    "storage_bucket": "litapp-81fc2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809614805911:android:0bbf7f50f2cc80c82492d2",
+        "android_client_info": {
+          "package_name": "com.luxuryintaste.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "809614805911-tafgc35fclle2q47g7ume61ij6uf7982.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.luxuryintaste.app",
+            "certificate_hash": "4ba2ec910bf587d64094d202bd477c9a162c41a3"
+          }
+        },
+        {
+          "client_id": "809614805911-gj5l72cigq1emba4v3gvbrpsmprf0h74.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCvS27iIDGnkHUsyxWhcJsknpMI5YDUSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "809614805911-gj5l72cigq1emba4v3gvbrpsmprf0h74.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

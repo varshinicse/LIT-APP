@@ -10,21 +10,35 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # UI & Fonts
   google_fonts: ^6.1.0
-  carousel_slider: ^4.2.1
+  font_awesome_flutter: ^10.7.0
   cupertino_icons: ^1.0.8
-  dropdown_button2: ^2.3.9  # Or latest version
   animations: ^2.0.11
-  provider: ^6.1.1
-  intl: ^0.20.2
-  audioplayers: ^5.2.1
   shimmer: ^3.0.0
   flutter_svg: ^2.0.9
+  carousel_slider: ^4.2.1
+  dropdown_button2: ^2.3.9
+
+  # State Management
+  provider: ^6.1.2
+
+  # Internationalization
+  intl: ^0.20.2
+
+  # Audio
+  audioplayers: ^5.2.1
+
+  # Firebase & Auth
+  firebase_core: ^3.7.0
+  firebase_auth: ^5.3.1
+  google_sign_in: ^6.2.1
+  flutter_facebook_auth: ^6.0.3
 
 dependency_overrides:
-  # Pin to an SDK-34-compatible Android impl to avoid requiring Android 36
+  # Keeps Android SDK compatibility (avoid requiring Android 36)
   path_provider_android: 2.2.6
-
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +47,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
 
   assets:
     - assets/images/blue-shoe.png
@@ -65,13 +86,16 @@ flutter:
     - assets/images/d2.jpg
     - assets/images/d3.jpg
     - assets/images/d4.jpg
-    # Newly added assets
+    - assets/images/d5.jpg
+    - assets/images/d6.jpg
+    - assets/images/d7.jpg
+    - assets/images/d8.jpg
     - assets/images/delivery.png
-    
+    - assets/images/grocery-store.png
     - assets/images/sbi.jpg
+    - assets/images/axis.png
     - assets/images/hdfc.png
     - assets/images/icic.png
-    - assets/images/axis.png
     - assets/images/gpay.png
     - assets/images/paytm.png
     - assets/images/phonepe.png
@@ -79,12 +103,6 @@ flutter:
     - assets/images/circle-check-solid-full.svg
     - assets/images/Vector.png
     - assets/images/robo.svg
-    
-    - assets/images/d5.jpg
-    - assets/images/d6.jpg
-    - assets/images/d7.jpg
-    - assets/images/d8.jpg
-    - assets/images/grocery-store.png
     - assets/images/men_collection.png
     - assets/images/women_collection.png
     - assets/images/diamond.png
@@ -135,21 +153,13 @@ flutter:
     - assets/images/bags-icon.png
     - assets/images/beginner.png
     - assets/images/amateur.png
-    - assets/images/connoisseur.png 
+    - assets/images/connoisseur.png
     - assets/images/video-game.png
     - assets/images/noti-footwear.jpg
     - assets/images/noti-bags.jpg
     - assets/images/noti-bags2.jpg
     - assets/images/noti-clothing.jpg
     - assets/images/noti-accessories.jpg
-    - assets/images/sbi.jpg
-    - assets/images/axis.png
-    - assets/images/hdfc.png
-    - assets/images/icic.png
-    - assets/images/gpay.png
-    - assets/images/paytm.png
-    - assets/images/phonepe.png
-    - assets/images/amazonpay.png
     - assets/images/gems1.png
     - assets/images/gems2.png
     - assets/images/gems3.png
@@ -173,6 +183,7 @@ flutter:
     - assets/images/fa4.jpg
     - assets/images/fa5.jpg
     - assets/images/b1.jpg
+    - assets/images/b2.jpg
     - assets/images/b3.jpg
     - assets/images/b4.jpg
     - assets/images/b5.jpg
@@ -191,7 +202,6 @@ flutter:
     - assets/images/c3.jpg
     - assets/images/c4.jpg
     - assets/images/c5.jpg
-    - assets/images/b2.jpg
     - assets/images/coupon_icon.png
     - assets/images/game entrance.png
     - assets/images/box.png

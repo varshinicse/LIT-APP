@@ -3,9 +3,8 @@ import 'package:lit/widgets/app_drawer.dart';
 import 'package:lit/widgets/common_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lit/providers/notification_provider.dart';
-import 'package:lit/ecommerce/cart_page.dart';
+
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -229,7 +228,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             ),
           ),
           IconButton(
-            icon: SvgPicture.asset('assets/images/trash.svg', height: 22, width: 22, color: Colors.redAccent),
+            icon: const Icon(Icons.delete_outline_sharp, color: Colors.redAccent),
             onPressed: onDelete,
           ),
         ],
@@ -265,7 +264,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             ),
           ),
           IconButton(
-            icon: SvgPicture.asset('assets/images/trash.svg', height: 22, width: 22, color: Colors.redAccent),
+            icon: const Icon(Icons.delete_outline_sharp, color: Colors.redAccent),
             onPressed: onDelete,
           ),
         ],

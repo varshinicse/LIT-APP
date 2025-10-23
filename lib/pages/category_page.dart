@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:lit/data/global_data.dart';
+import 'package:lit/global_data.dart'; 
 import 'package:lit/ecommerce/widgets/product_card.dart';
 import 'package:lit/widgets/app_drawer.dart';
 import 'package:lit/widgets/common_button.dart';
-
+import '../ecommerce/wishlist_page.dart';
+import 'package:lit/ecommerce/wishlist_service.dart';
+import 'package:provider/provider.dart';
 import '../ecommerce/widgets/sortby_bottomsheet.dart';
+import 'package:lit/ecommerce/cart_service.dart';
 
-class CategoryPage extends StatelessWidget {
+class CategoryPage extends StatefulWidget {
   final String title;
   final String categoryKey;
   final String type;
@@ -21,12 +24,17 @@ class CategoryPage extends StatelessWidget {
   });
 
   @override
+  State<CategoryPage> createState() => _CategoryPageState();
+}
+
+class _CategoryPageState extends State<CategoryPage> {
+  @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> filteredProducts = allProducts.where((product) {
-      final matchCategory = categoryKey.toLowerCase() == 'shop all' ||
-          product['category']?.toLowerCase() == categoryKey.toLowerCase();
-      final matchType = product['type']?.toLowerCase() == type.toLowerCase();
-      final matchGender = product['gender']?.toLowerCase() == gender.toLowerCase();
+      final matchCategory = widget.categoryKey.toLowerCase() == 'shop all' ||
+          product['category']?.toLowerCase() == widget.categoryKey.toLowerCase();
+      final matchType = product['type']?.toLowerCase() == widget.type.toLowerCase();
+      final matchGender = product['gender']?.toLowerCase() == widget.gender.toLowerCase();
       return matchCategory && matchType && matchGender;
     }).toList();
 
@@ -49,16 +57,48 @@ class CategoryPage extends StatelessWidget {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Icon(Icons.favorite_border, color: Colors.white),
+          Consumer<WishlistService>(
+            builder: (context, wishlist, child) => Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.favorite_border, color: Colors.white),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const WishlistPage()),
+                    );
+                  },
+                ),
+                if (wishlist.count > 0)
+                  Positioned(
+                    right: 10,
+                    top: 6,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.redAccent,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                      child: Text(
+                        '${wishlist.count}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ],
       ),
 
       body: Stack(
         children: [
-          // 🔹 Background Image
           Positioned.fill(
             child: Image.asset(
               'assets/images/background.png',
@@ -69,7 +109,6 @@ class CategoryPage extends StatelessWidget {
             child: Container(color: Colors.black.withOpacity(0.6)),
           ),
 
-          // 🔹 Foreground Content
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -94,6 +133,15 @@ class CategoryPage extends StatelessWidget {
                   ),
                 ),
               ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+                child: Text(
+                  'Found ${filteredProducts.length} items',
+                  style: const TextStyle(color: Colors.white70, fontSize: 13),
+                ),
+              ),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                 child: Container(
@@ -129,7 +177,6 @@ class CategoryPage extends StatelessWidget {
                           );
                         },
                       ),
-
                     ],
                   ),
                 ),
@@ -153,26 +200,47 @@ class CategoryPage extends StatelessWidget {
                         onBuyNow: () {
                           Navigator.pushNamed(context, '/buy-now', arguments: product);
                         },
+                        onAddToCart: () {
+                          Provider.of<CartService>(context, listen: false).add(product);
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.white, // ✅ white background
+                              content: Text(
+                                'Item added to cart',
+                                style: TextStyle(
+                                  color: Colors.black, // ✅ black text
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
                 ),
               ),
-
-
-
             ],
           ),
         ],
       ),
 
       bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: -1,
-        onTap: (index) {
-          // Leave unchanged for navigation logic
-        },
-        isMarketplace: true,
-      ),
+  currentIndex: 1,
+  isMarketplace: true,
+  onTap: (index) {
+    // Handle navigation
+    if (index == 0) {
+      Navigator.pushNamed(context, '/home');
+    } else if (index == 1) {
+      Navigator.pushNamed(context, '/cart');
+    } else if (index == 2) {
+      Navigator.pushNamed(context, '/profile');
+    }
+  },
+),
     );
   }
 }
