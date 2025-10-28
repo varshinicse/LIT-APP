@@ -214,3 +214,13 @@ flutter:
     - assets/images/box.png
     - assets/images/maps.png
     - assets/images/Button.png
+    # Streak dialog additional assets
+    - assets/images/f11.png
+    - assets/images/f22.png
+    - assets/images/f33.png
+    - assets/images/f44.png
+    - assets/images/f1.png
+    - assets/images/f2.png
+    - assets/images/f3.png
+    - assets/images/f4.png
+    - assets/images/close.png

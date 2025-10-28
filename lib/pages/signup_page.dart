@@ -9,6 +9,17 @@ class SignUpPage extends StatefulWidget {
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
+// Shared radial gradient for sustainable theme buttons
+const RadialGradient sustainableGradient = RadialGradient(
+  center: Alignment(0.08, 0.08),
+  radius: 7.98,
+  colors: [
+    Color.fromRGBO(0, 0, 0, 0.8),
+    Color.fromRGBO(147, 51, 234, 0.4),
+  ],
+  stops: [0.0, 0.5],
+);
+
 class _SignUpPageState extends State<SignUpPage> {
   bool _showFacebookPopup = false;
   final TextEditingController _nameController = TextEditingController();
@@ -159,7 +170,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: const Text(
                         "Sign In",
                         style: TextStyle(
-                          color: Color.fromRGBO(147, 51, 234, 0.9),
+                          color: Color(0xFF9333EA),
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -389,14 +400,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color.fromRGBO(147, 51, 234, 0.9),
-            Color.fromRGBO(0, 0, 0, 0.85)
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        gradient: sustainableGradient,
         borderRadius: BorderRadius.circular(20),
       ),
       child: ElevatedButton(

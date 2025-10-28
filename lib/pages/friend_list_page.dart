@@ -469,7 +469,7 @@ class _FriendListPageState extends State<FriendListPage> {
                                     Color.fromRGBO(147, 51, 234, 0.4),
                                   ],
                                 ),
-                                border: Border.all(color: Colors.white, width: 1),
+                                border: Border.all(color: Colors.white, width: 0.6),
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: const [
                                   BoxShadow(
@@ -499,8 +499,8 @@ class _FriendListPageState extends State<FriendListPage> {
                 ),
               ),
               Positioned(
-                top: 8,
-                right: 7,
+                top: 0,
+                right: 0,
                 child: GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: Stack(
@@ -1544,6 +1544,17 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
   final TextEditingController _searchController = TextEditingController();
   bool isSearching = false;
 
+  int currentIndex = -1;
+
+  void _onNavTapped(int index) {
+    setState(() => currentIndex = index);
+    if (index == 0) {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else if (index == 2) {
+      Navigator.pushReplacementNamed(context, '/profile');
+    }
+  }
+
   void _showSettingsDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -1961,6 +1972,11 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
     return Scaffold(
       drawer: const AppDrawer(),
       extendBodyBehindAppBar: true,
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: currentIndex,
+        onTap: _onNavTapped,
+        isGame: true,
+      ),
       body: Stack(
         children: [
           Positioned.fill(child: Image.asset('assets/images/background.png', fit: BoxFit.cover)),
@@ -1984,6 +2000,8 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 6),
+                Text('FRIENDS', style: GoogleFonts.kronaOne(color: Colors.white, letterSpacing: 6, fontSize: 20)),
                 const SizedBox(height: 6),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -2011,13 +2029,13 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
-                Text('FRIENDS', style: GoogleFonts.kronaOne(color: Colors.white, letterSpacing: 6, fontSize: 20)),
-                const SizedBox(height: 28),
+                const SizedBox(height: 22),
+                
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
+                  
+  GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),

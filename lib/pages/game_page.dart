@@ -288,7 +288,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
+                          fontSize: 26,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -301,7 +301,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
 
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 12),
                   ],
                   ),
                 ),
@@ -324,19 +324,18 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       alignment: Alignment.center,
       children: [
         Column(
-      children: [
-        // Add padding at the top to prevent clipping during animation
-        const SizedBox(height: 15),
-        Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 // Left card with per-card feedback
-            Expanded(
+                Expanded(
                   child: Column(
                     children: [
                       GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => _selectOption(1),
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => _selectOption(1),
                         child: Transform.translate(
                           offset: Offset(0, _selectedOption == 1 ? -6 : 0),
                           child: AnimatedScale(
@@ -345,43 +344,43 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             scale: _selectedOption == 1 ? 1.06 : 1.0,
                             child: KeyedSubtree(
                               key: _leftCardKey,
-                  child: _selectionCard(
-                    imagePath: 'assets/images/shoe1.png',
-                    label: 'BALENCIAGA',
-                    showPrice: _selectedOption != null,
-                    price: _shoe1Price,
+                              child: _selectionCard(
+                                imagePath: 'assets/images/shoe1.png',
+                                label: 'BALENCIAGA',
+                                showPrice: _selectedOption != null,
+                                price: _shoe1Price,
                                 glowColor: _selectedOption == 1 ? const Color(0x6633B642) : Colors.transparent,
                                 borderColor: _selectedOption == 1 ? const Color(0xFF33B642) : null,
                                 showCorrectAnswer: _selectedOption == 1,
-                  ),
-                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
                       if (_selectedOption == 1) ...[
-                        const SizedBox(height: 14),
+                        const SizedBox(height: 8),
                         const Text(
                           'CORRECT ANSWER',
                           style: TextStyle(
-                            color: Color(0xFF33B642), 
-                            fontSize: 16, 
-                            fontWeight: FontWeight.bold
+                            color: Color(0xFF33B642),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 2),
                         const _RewardIcon('assets/images/gold_star.png'),
                       ],
                     ],
-              ),
-            ),
-            const SizedBox(width: 16),
+                  ),
+                ),
+                const SizedBox(width: 16),
                 // Right card with per-card feedback
-            Expanded(
+                Expanded(
                   child: Column(
                     children: [
                       GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => _selectOption(2),
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => _selectOption(2),
                         child: Transform.translate(
                           offset: Offset(0, _selectedOption == 2 ? -6 : 0),
                           child: AnimatedScale(
@@ -390,112 +389,106 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
                             scale: _selectedOption == 2 ? 1.06 : 1.0,
                             child: KeyedSubtree(
                               key: _rightCardKey,
-                  child: _selectionCard(
-                    imagePath: 'assets/images/shoe2.png',
-                    label: 'CONVERSE',
-                    showPrice: _selectedOption != null,
-                    price: _shoe2Price,
-                                glowColor: _selectedOption == 2 ? const Color(0x80CA3232) : Colors.transparent,
+                              child: _selectionCard(
+                                imagePath: 'assets/images/shoe2.png',
+                                label: 'CONVERSE',
+                                showPrice: _selectedOption != null,
+                                price: _shoe2Price,
+                                glowColor: Colors.transparent,
                                 borderColor: _selectedOption == 2 ? const Color(0xB2CA3232) : null,
                                 showWrongAnswer: _selectedOption == 2,
                               ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (_selectedOption == 2) ...[
+                        const SizedBox(height: 8),
+                        const Text(
+                          'WRONG ANSWER',
+                          style: TextStyle(
+                            color: Color(0xB2CA3232),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        const _RewardIcon('assets/images/heartwrong.png'),
+                      ],
+                    ],
                   ),
-                ),
-              ),
-            ),
-            if (_selectedOption == 2) ...[
-              const SizedBox(height: 14),
-              const Text(
-                'WRONG ANSWER',
-                style: TextStyle(
-                  color: Color(0xB2CA3232), 
-                  fontSize: 16, 
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-              const SizedBox(height: 2),
-              const _RewardIcon('assets/images/heartwrong.png'),
-            ],
-          ],
-        ),
                 ),
               ],
             ),
-            // Pin timer slightly above bottom so it's always visible
-            if (_hasStarted)
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: _selectedOption != null ? 150 : 110,
-                child: Center(
-                  child: Text(
-                    "00:${secondsRemaining.toString().padLeft(2, '0')}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-
-            // Pin action buttons above bottom so they don't go off screen
-            if (_selectedOption != null)
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 56,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (_selectedOption == 2) ...[
-                      _primaryButton('Undo', _undoSelection),
-                      const SizedBox(width: 12),
-                    ],
-                    _primaryButton('Next', () {
-                      setState(() {
-                        _selectedOption = null; // reset for next round
-                        _showWrongReward = false;
-                        secondsRemaining = 15;
-                      });
-                      countdownTimer?.cancel();
-                      _startTimer();
-                    }),
-                    const SizedBox(width: 12),
-                    _primaryButton('Exit', () {
-                      _showExitConfirmation(context);
-                    }),
-                  ],
-                ),
-              ),
-            if (_selectedOption == null)
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 36,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _ActionButton(
-                      label: "Hint",
-                      onPressed: () => _showSkipDialog(
-                        context,
-                        "Are you sure you want a hint?",
-                        "Hint 5",
+            const SizedBox(height: 8),
+            Padding(
+              padding: EdgeInsets.only(top: _selectedOption != null ? 0 : 30),
+              child: Column(
+                children: [
+                  if (_hasStarted)
+                    Center(
+                      child: Text(
+                        "00:${secondsRemaining.toString().padLeft(2, '0')}",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    _ActionButton(
-                      label: "Skip",
-                      onPressed: () => _showSkipDialog(
-                        context,
-                        "Are you sure you want to skip?",
-                        "Skip 5",
-                      ),
+                  SizedBox(height: _selectedOption != null ? 6 : 24),
+                  // Action buttons centered below both cards
+                  if (_selectedOption != null) ...[
+                    const SizedBox(height: 2.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (_selectedOption == 2) _primaryButton('Undo', _undoSelection),
+                        if (_selectedOption == 2) const SizedBox(width: 12),
+                        _primaryButton('Next', () {
+                          setState(() {
+                            _selectedOption = null; // reset for next round
+                            _showWrongReward = false;
+                            secondsRemaining = 15;
+                          });
+                          countdownTimer?.cancel();
+                          _startTimer();
+                        }),
+                        const SizedBox(width: 12),
+                        _primaryButton('Exit', () {
+                          _showExitConfirmation(context);
+                        }),
+                      ],
                     ),
                   ],
-                ),
+                  // Hint / Skip Buttons with a little more spacing
+                  if (_selectedOption == null) const SizedBox(height: 20),
+                  if (_selectedOption == null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _ActionButton(
+                          label: "Hint",
+                          onPressed: () => _showSkipDialog(
+                            context,
+                            "Are you sure you want a hint?",
+                            "Hint 5",
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        _ActionButton(
+                          label: "Skip",
+                          onPressed: () => _showSkipDialog(
+                            context,
+                            "Are you sure you want to skip?",
+                            "Skip 5",
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
               ),
+            ),
           ],
         ),
       ],
@@ -877,6 +870,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     );
   }
 
+
   void _showExitConfirmation(BuildContext context) {
     showDialog(
       context: context,
@@ -1036,95 +1030,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       context: context,
       barrierDismissible: true,
       builder: (context) {
-        final size = MediaQuery.of(context).size;
-        final double maxW = 420;
-        final double dialogWidth = math.min(size.width * 0.9, maxW);
-        final double dialogHeight = math.min(size.height * 0.72, 520);
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
-          child: Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: Container(
-                  width: dialogWidth,
-                  height: dialogHeight,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: Colors.white.withOpacity(0.08),
-                    border: Border.all(color: Colors.white.withOpacity(0.25), width: 1),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.35),
-                        blurRadius: 24,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                    gradient: const RadialGradient(
-                      center: Alignment(0.0, -0.3),
-                      radius: 1.2,
-                      colors: [
-                        Color.fromRGBO(255, 255, 255, 0.10),
-                        Color.fromRGBO(255, 255, 255, 0.03),
-                      ],
-                    ),
-                  ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Soft overlay to blend content further
-                      Positioned.fill(
-                        child: IgnorePointer(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Colors.white.withOpacity(0.04),
-                                  Colors.white.withOpacity(0.02),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: FittedBox(
-                          child: Image.asset(
-                            'assets/images/streaks.png',
-                            width: dialogWidth * 0.9,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: -6,
-                        right: -6,
-                        child: GestureDetector(
-                          onTap: () => Navigator.of(context).pop(),
-                          child: SizedBox(
-                            width: 64,
-                            height: 64,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset('assets/images/Rectangle.png', width: 64, height: 64),
-                                const Icon(Icons.close, color: Colors.white, size: 22),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+        return StreakDialog(
+          avatarPath: 'assets/images/avatar.jpg',
+          username: 'LuxuryinTaste',
+          userTier: 'Beginner',
+          streakDays: _streakDays,
         );
       },
     );
@@ -1289,22 +1199,22 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
 
         // Original card container (no outer glow/border outlines)
         Container(
-          decoration: BoxDecoration(
-            gradient: const RadialGradient(
-              center: Alignment(0.08, 0.08),
-              radius: 7.98,
-              colors: [
+      decoration: BoxDecoration(
+        gradient: const RadialGradient(
+          center: Alignment(0.08, 0.08),
+          radius: 7.98,
+          colors: [
                 Color.fromRGBO(0, 0, 0, 0.86),
                 Color.fromRGBO(147, 51, 234, 0.46),
-              ],
-              stops: [0.0, 0.5],
-            ),
+          ],
+          stops: [0.0, 0.5],
+        ),
             border: Border.all(
               color: isSelected ? Colors.transparent : const Color(0xFFAEAEAE),
               width: 1,
             ),
-            borderRadius: BorderRadius.circular(16),
-          ),
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -1360,80 +1270,92 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               ),
             ],
           ),
-          
-              isSelected
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: Column(
-                        children: [
-                          Text(
-                            _selectedOption == null ? (imagePath.contains('shoe1') ? 'Option 1' : 'Option 2') : label,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          if (showPrice)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 6),
-                              child: Text(
-                                price,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    )
-                  : Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: const BoxDecoration(
-                        gradient: RadialGradient(
-                          center: Alignment(0.08, 0.08),
-                          radius: 7.98,
-                          colors: [
-                            Color.fromRGBO(0, 0, 0, 0.8),
-                            Color.fromRGBO(147, 51, 234, 0.4),
-                          ],
-                          stops: [0.0, 0.5],
+          // Bottom area: when selected, hide strip and divider; when not, show them
+          if (isSelected)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Column(
+                children: [
+                  Text(
+                    _selectedOption == null ? (imagePath.contains('shoe1') ? 'Option 1' : 'Option 2') : label,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  if (showPrice)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Text(
+                        price,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
-                        border: Border(
-                          top: BorderSide(color: Color(0xFFAEAEAE), width: 1),
-                        ),
-                        borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            _selectedOption == null ? (imagePath.contains('shoe1') ? 'Option 1' : 'Option 2') : label,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                          ),
-                          if (showPrice)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 6),
-                              child: Text(
-                                price,
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                        ],
                       ),
                     ),
-            ],
+                ],
+              ),
+            )
+          else
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: const BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment(0.08, 0.08),
+                radius: 7.98,
+                colors: [
+                  Color.fromRGBO(0, 0, 0, 0.8),
+                  Color.fromRGBO(147, 51, 234, 0.4),
+                ],
+                stops: [0.0, 0.5],
+              ),
+              border: Border(
+                top: BorderSide(color: Color(0xFFAEAEAE), width: 1),
+              ),
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+            ),
+            child: Column(
+              children: [
+                Text(
+                    _selectedOption == null ? (imagePath.contains('shoe1') ? 'Option 1' : 'Option 2') : label,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+                if (showPrice)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      price,
+                      style: const TextStyle(
+                          color: Colors.white70,
+                          fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
+        ],
+      ),
         ),
+        
+        // Color overlay when card is selected
+        if (isSelected)
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent, // keep selected card bright (no dim overlay)
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -1928,17 +1850,268 @@ class _RewardIconState extends State<_RewardIcon> with SingleTickerProviderState
   }
 }
 
-/// --- 🔥 FLAME BUILDER (with flicker + proper scale) ---
+/// --- IMPROVED STREAK DIALOG DESIGN ---
+/// GOAL: Match the second image reference (bigger flames, clear fadefire background, balanced layout)
+/// NOTE: Keep the rest of GamePage unchanged.
+
+class StreakDialog extends StatefulWidget {
+  final String avatarPath;
+  final String username;
+  final String userTier;
+  final int streakDays;
+
+  const StreakDialog({
+    Key? key,
+    required this.avatarPath,
+    required this.username,
+    required this.userTier,
+    required this.streakDays,
+  }) : super(key: key);
+
+  @override
+  State<StreakDialog> createState() => _StreakDialogState();
+}
+
+class _StreakDialogState extends State<StreakDialog>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _entryController;
+  late Animation<double> _scaleAnim;
+  late Animation<double> _fadeAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _entryController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 380),
+    );
+    _scaleAnim = Tween<double>(begin: 0.95, end: 1.0).animate(
+      CurvedAnimation(parent: _entryController, curve: Curves.easeOutBack),
+    );
+    _fadeAnim =
+        CurvedAnimation(parent: _entryController, curve: Curves.easeInOut);
+    _entryController.forward();
+  }
+
+  @override
+  void dispose() {
+    _entryController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // No need for dialogWidth; fixed size per spec
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 303, left: 20),
+        child: FadeTransition(
+          opacity: _fadeAnim,
+          child: ScaleTransition(
+            scale: _scaleAnim,
+            child: Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                    child: Container(
+                      width: 346,
+                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: Colors.white.withOpacity(0.12),
+                        border: Border.all(color: Colors.white.withOpacity(0.28), width: 1),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.35),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      constraints: BoxConstraints(
+                        // cap dialog height to avoid bottom overflow
+                        maxHeight: MediaQuery.of(context).size.height * 0.38,
+                      ),
+                      child: DefaultTextStyle.merge(
+                      style: const TextStyle(
+                        decoration: TextDecoration.none,
+                        decorationColor: Colors.transparent,
+                      ),
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                          // Faded fire texture
+                          Positioned.fill(
+                            child: IgnorePointer(
+                              child: Opacity(
+                                opacity: 0.25,
+                                child: Image.asset(
+                                  'assets/images/fadefire.png',
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.center,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // Edge flames
+                          _flame(left: -40, top: 40, angle: -0.3),
+                          _flame(right: -40, top: 40, angle: 0.3),
+                          _flame(left: -40, bottom: -10, angle: 0.2),
+                          _flame(right: -40, bottom: -10, angle: -0.2),
+
+                          // Content
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                children: [
+                                  ClipOval(
+                                    child: Image.asset(
+                                      widget.avatarPath,
+                                      width: 38,
+                                      height: 38,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.username,
+                                        style: GoogleFonts.inter(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 14,
+                                          height: 1.0,
+                                          letterSpacing: 0,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        widget.userTier,
+                                        style: GoogleFonts.inter(
+                                          color: Colors.white70,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          height: 1.0,
+                                          letterSpacing: 0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 24),
+
+                              // Streak Days
+                              Text(
+                                '${widget.streakDays}',
+                                style: GoogleFonts.kronaOne(
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.0,
+                                  letterSpacing: 0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                'DAYS',
+                                style: GoogleFonts.kronaOne(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.0,
+                                  letterSpacing: 0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+
+                              Text(
+                                "You're On A Streak",
+                                style: GoogleFonts.inter(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  height: 0.88,
+                                  letterSpacing: 0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+
+                              ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: 300),
+                                child: Text(
+                                  'Your Consistency Is Unmatched — And We Notice.\nKeep The Streak Alive And Hit 30 For A Surprise Reward',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.inter(
+                                    color: Colors.white70,
+                                    fontSize: 13,
+                                    height: 1.4,
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: 0,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+
+                              Text(
+                                'Next Milestone : 30 Days',
+                                style: GoogleFonts.inter(
+                                  color: Colors.white70,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.0,
+                                  letterSpacing: 0,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          // Close button
+                          Positioned(
+                            top: -6,
+                            right: -6,
+                            child: GestureDetector(
+                              onTap: () => Navigator.of(context).pop(),
+                              child: Image.asset(
+                                'assets/images/close.png',
+                                width: 32,
+                                height: 16,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// --- 🔥 FLAME BUILDER (with flicker + proper scale) ---
   Widget _flame({
     double? left,
     double? right,
     double? top,
     double? bottom,
     double angle = 0,
-    String asset = 'assets/images/fire.png',
-    double size = 100,
-    bool glow = true,
-    double opacity = 1.0,
   }) {
     return Positioned(
       left: left,
@@ -1948,32 +2121,18 @@ class _RewardIconState extends State<_RewardIcon> with SingleTickerProviderState
       child: _FlameFlicker(
         child: Transform.rotate(
           angle: angle,
-          child: Container(
-            decoration: glow
-                ? BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.orange.withOpacity(0.45),
-                        blurRadius: 22,
-                        spreadRadius: 8,
-                      ),
-                    ],
-                  )
-                : const BoxDecoration(),
-            child: Opacity(
-              opacity: opacity,
-              child: Image.asset(
-                asset,
-                width: size,
-                height: size,
-                fit: BoxFit.contain,
-              ),
-            ),
+          child: Image.asset(
+            'assets/images/fire.png',
+            width: 56,
+            height: 56,
+            fit: BoxFit.contain,
+            filterQuality: FilterQuality.high,
           ),
         ),
       ),
     );
   }
+}
 
 /// --- Flicker Animation for Flames ---
 class _FlameFlicker extends StatefulWidget {

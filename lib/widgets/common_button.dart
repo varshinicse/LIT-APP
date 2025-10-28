@@ -83,7 +83,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         if (isGame) {
-                          Navigator.pushNamed(context, '/save-products');
+                          Navigator.pushNamed(context, '/saved');
                         } else if (isMarketplace) {
                           Navigator.push(
                             context,

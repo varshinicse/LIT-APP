@@ -4,6 +4,7 @@ import 'package:lit/data/saved_items.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lit/widgets/app_drawer.dart';
 import 'package:lit/widgets/notification_bell.dart';
+import 'package:lit/widgets/common_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lit/ecommerce/cart_page.dart';
 import 'package:lit/pages/shop_page.dart';
@@ -148,7 +149,8 @@ class _SavedItemPageState extends State<SavedItemPage> {
                               crossAxisCount: 2,
                               crossAxisSpacing: 12,
                               mainAxisSpacing: 12,
-                              childAspectRatio: 0.65,
+                              // Slightly taller tiles to avoid overflow on dense content
+                              childAspectRatio: 0.62,
                             ),
                             itemCount: SavedItems.items.length,
                             itemBuilder: (context, index) {
@@ -162,35 +164,17 @@ class _SavedItemPageState extends State<SavedItemPage> {
         ],
       ),
 
-      // ✅ Bottom nav bar with updated icons
-      bottomNavigationBar: Container(
-        height: 70,
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.8),
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () => _onNavTapped(0),
-              icon: Image.asset('assets/images/home_icon.png', width: 30, height: 30),
-            ),
-            IconButton(
-              onPressed: () => _onNavTapped(1),
-              icon: Image.asset('assets/images/save-pro-icon.png', width: 30, height: 30),
-            ),
-            IconButton(
-              onPressed: () => _onNavTapped(2),
-              icon: const Icon(Icons.shopping_bag, color: Colors.white, size: 30),
-            ),
-            IconButton(
-              onPressed: () => _onNavTapped(3),
-              icon: Image.asset('assets/images/profile_icon.png', width: 30, height: 30),
-            ),
-          ],
-        ),
+      // ✅ Shared Bottom nav bar (same as game_page.dart)
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: currentIndex, // highlight Saved tab
+        onTap: (index) {
+          // mirror game_page behavior
+          if (index == 0) {
+            Navigator.pushReplacementNamed(context, '/home');
+          }
+        },
+        isMarketplace: false,
+        isGame: true, // middle button goes to /saved, extra grocery icon visible
       ),
     );
   }
@@ -220,12 +204,12 @@ class _SavedItemPageState extends State<SavedItemPage> {
                     ),
                     child: Image.asset(
                       item['imagePath'],
-                    height: 150,
+                    height: 140,
                       width: double.infinity,
                     fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) {
                       return const SizedBox(
-                        height: 150,
+                        height: 140,
                         child: Center(
                           child: Icon(Icons.broken_image, color: Colors.white54, size: 60),
                         ),
@@ -260,16 +244,16 @@ class _SavedItemPageState extends State<SavedItemPage> {
                 filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.06),
-                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    color: Colors.white.withOpacity(0.08),
+                    border: Border.all(color: Colors.white.withOpacity(0.12)),
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.white.withOpacity(0.18),
-                        Colors.white.withOpacity(0.03),
+                        Colors.white.withOpacity(0.04),
                       ],
                     ),
                     boxShadow: [
@@ -280,6 +264,7 @@ class _SavedItemPageState extends State<SavedItemPage> {
                       ),
                     ],
                   ),
+                  constraints: const BoxConstraints(minHeight: 112),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -290,20 +275,25 @@ class _SavedItemPageState extends State<SavedItemPage> {
                   style: GoogleFonts.poppins(
                           color: const Color(0xFF9333EA),
                           fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                          fontSize: 13,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 3),
                       Text(
                   item['price'] ?? '₹0',
                         textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                          fontSize: 15,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 8),
 
                       // 🔹 Button + Delete
                       Row(
@@ -320,7 +310,7 @@ class _SavedItemPageState extends State<SavedItemPage> {
                           );
                         },
                         child: Container(
-                                height: 38,
+                                height: 36,
                           decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   gradient: const RadialGradient(
@@ -358,8 +348,16 @@ class _SavedItemPageState extends State<SavedItemPage> {
                     const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () => _removeItem(index),
-                            child: const Icon(Icons.delete, color: Colors.redAccent, size: 22),
-                          ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.08),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white.withOpacity(0.12)),
+                        ),
+                        padding: const EdgeInsets.all(6),
+                        child: const Icon(Icons.delete, color: Colors.redAccent, size: 18),
+                      ),
+                    ),
                         ],
                       ),
                     ],
