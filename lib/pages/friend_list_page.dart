@@ -18,10 +18,44 @@ class FriendListPage extends StatefulWidget {
   State<FriendListPage> createState() => _FriendListPageState();
 }
 
+// Reusable dialog close button using close.png, positioned to touch the top-right border.
+class _DialogCloseButton extends StatelessWidget {
+  final double size;
+  final double topOffset;
+  final double rightOffset;
+  const _DialogCloseButton({Key? key, this.size = 32, this.topOffset = -10, this.rightOffset = -10}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: topOffset,
+      right: rightOffset,
+      child: Semantics(
+        button: true,
+        label: 'Close',
+        child: GestureDetector(
+          onTap: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+          },
+          child: Image.asset(
+            'assets/images/close.png',
+            width: size,
+            height: size,
+            fit: BoxFit.contain,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _FriendListPageState extends State<FriendListPage> {
   int currentIndex = -1;
   String selectedTab = 'Friend list';
   bool isSearching = false;
+  bool _initializedFromArgs = false;
 
   TextEditingController _searchController = TextEditingController();
 
@@ -49,9 +83,17 @@ class _FriendListPageState extends State<FriendListPage> {
   ];
 
   final List<Map<String, dynamic>> pendingRequests = [
-    {'name': 'Luxuryintatse', 'image': 'assets/images/avatar10.jpg', 'score': '553'},
+    {
+      'name': 'Luxuryintatse',
+      'image': 'assets/images/avatar10.jpg',
+      'score': '553',
+    },
     {'name': 'ChicWave', 'image': 'assets/images/avatar11.jpg', 'score': '521'},
-    {'name': 'GlamMystery', 'image': 'assets/images/avatar8.jpg', 'score': '499'},
+    {
+      'name': 'GlamMystery',
+      'image': 'assets/images/avatar8.jpg',
+      'score': '499',
+    },
   ];
 
   final List<Map<String, String>> allUsers = [
@@ -84,7 +126,10 @@ class _FriendListPageState extends State<FriendListPage> {
       builder: (context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 80),
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 40,
+            vertical: 80,
+          ),
           child: const _AudioSettingsPopup(),
         );
       },
@@ -98,7 +143,10 @@ class _FriendListPageState extends State<FriendListPage> {
       builder: (context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 60),
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 60,
+          ),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -146,8 +194,11 @@ class _FriendListPageState extends State<FriendListPage> {
                                       ),
                                     ),
                                     const SizedBox(width: 10),
-                                    const Icon(Icons.person_add_alt_1,
-                                        size: 18, color: Colors.white),
+                                    const Icon(
+                                      Icons.person_add_alt_1,
+                                      size: 18,
+                                      color: Colors.white,
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 4),
@@ -156,13 +207,16 @@ class _FriendListPageState extends State<FriendListPage> {
                                     const Text(
                                       "Beginner",
                                       style: TextStyle(
-                                          color: Colors.white70, fontSize: 12),
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                      ),
                                     ),
                                     const SizedBox(width: 6),
                                     CircleAvatar(
                                       radius: 8,
                                       backgroundImage: AssetImage(
-                                          'assets/images/india-flag.png'),
+                                        'assets/images/india-flag.png',
+                                      ),
                                       backgroundColor: Colors.transparent,
                                     ),
                                   ],
@@ -180,12 +234,22 @@ class _FriendListPageState extends State<FriendListPage> {
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(255, 255, 255, 0.03),
-                                    border: Border.all(color: Color(0xFF8A6FCF), width: 0.5),
+                                    color: const Color.fromRGBO(
+                                      255,
+                                      255,
+                                      255,
+                                      0.03,
+                                    ),
+                                    border: Border.all(
+                                      color: Color(0xFF8A6FCF),
+                                      width: 0.5,
+                                    ),
                                     borderRadius: BorderRadius.circular(12),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: const Color(0x59CFCFCF).withOpacity(0.1),
+                                        color: const Color(
+                                          0x59CFCFCF,
+                                        ).withOpacity(0.1),
                                         offset: const Offset(0, 1),
                                       ),
                                       BoxShadow(
@@ -196,14 +260,16 @@ class _FriendListPageState extends State<FriendListPage> {
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         "Player Stats",
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                            color: Colors.white),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                       const Divider(
                                         color: Color(0xFF8A6FCF),
@@ -212,7 +278,8 @@ class _FriendListPageState extends State<FriendListPage> {
                                       ),
                                       const SizedBox(height: 6),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
                                         children: const [
                                           _StatColumn(
                                             value: "16",
@@ -225,7 +292,7 @@ class _FriendListPageState extends State<FriendListPage> {
                                             valueColor: Color(0xFFA46BF5),
                                           ),
                                         ],
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -236,12 +303,22 @@ class _FriendListPageState extends State<FriendListPage> {
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(255, 255, 255, 0.03),
-                                    border: Border.all(color: Color(0xFF8A6FCF), width: 0.5),
+                                    color: const Color.fromRGBO(
+                                      255,
+                                      255,
+                                      255,
+                                      0.03,
+                                    ),
+                                    border: Border.all(
+                                      color: Color(0xFF8A6FCF),
+                                      width: 0.5,
+                                    ),
                                     borderRadius: BorderRadius.circular(12),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: const Color(0x59CFCFCF).withOpacity(0.1),
+                                        color: const Color(
+                                          0x59CFCFCF,
+                                        ).withOpacity(0.1),
                                         offset: const Offset(0, 1),
                                       ),
                                       BoxShadow(
@@ -252,14 +329,16 @@ class _FriendListPageState extends State<FriendListPage> {
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         "Badges",
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                            color: Colors.white),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                       const Divider(
                                         color: Color(0xFF8A6FCF),
@@ -276,7 +355,8 @@ class _FriendListPageState extends State<FriendListPage> {
                                           ),
                                           const SizedBox(width: 8),
                                           Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: const [
                                               Text(
                                                 "Amature",
@@ -295,9 +375,9 @@ class _FriendListPageState extends State<FriendListPage> {
                                                 ),
                                               ),
                                             ],
-                                          )
+                                          ),
                                         ],
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -310,7 +390,10 @@ class _FriendListPageState extends State<FriendListPage> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: const Color.fromRGBO(255, 255, 255, 0.03),
-                            border: Border.all(color: Color(0xFF8A6FCF), width: 0.5),
+                            border: Border.all(
+                              color: Color(0xFF8A6FCF),
+                              width: 0.5,
+                            ),
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
@@ -342,7 +425,8 @@ class _FriendListPageState extends State<FriendListPage> {
                               ),
                               const SizedBox(height: 8),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: const [
                                   _AchievementBox(
                                     icon: Icons.shopping_bag,
@@ -375,20 +459,9 @@ class _FriendListPageState extends State<FriendListPage> {
                 ),
               ),
               Positioned(
-                top: 3,
-                right: 3,
-                child: GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF2D0C4B),
-                      shape: BoxShape.circle,
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: const Icon(Icons.close,
-                        size: 16, color: Color(0xffD9BFFF)),
-                  ),
-                ),
+                top: -6,
+                right: -6,
+                child: _DialogCloseButton(size: 32),
               ),
             ],
           ),
@@ -404,7 +477,10 @@ class _FriendListPageState extends State<FriendListPage> {
       builder: (context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 60),
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 60,
+          ),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -433,18 +509,24 @@ class _FriendListPageState extends State<FriendListPage> {
                         Text(
                           name,
                           style: GoogleFonts.kronaOne(
-                              color: Colors.white, fontSize: 22),
+                            color: Colors.white,
+                            fontSize: 22,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 18),
-                        CircleAvatar(radius: 62, backgroundImage: AssetImage(imagePath)),
+                        CircleAvatar(
+                          radius: 62,
+                          backgroundImage: AssetImage(imagePath),
+                        ),
                         const SizedBox(height: 22),
                         const Text(
                           'Is now in your Friend List!',
                           style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 26),
@@ -456,7 +538,8 @@ class _FriendListPageState extends State<FriendListPage> {
                               Navigator.of(context).pop();
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                    builder: (_) => const FriendSuggestionsPage()),
+                                  builder: (_) => const FriendSuggestionsPage(),
+                                ),
                               );
                             },
                             child: Container(
@@ -469,7 +552,10 @@ class _FriendListPageState extends State<FriendListPage> {
                                     Color.fromRGBO(147, 51, 234, 0.4),
                                   ],
                                 ),
-                                border: Border.all(color: Colors.white, width: 0.6),
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 0.6,
+                                ),
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: const [
                                   BoxShadow(
@@ -499,18 +585,10 @@ class _FriendListPageState extends State<FriendListPage> {
                 ),
               ),
               Positioned(
-                top: 0,
-                right: 0,
-                child: GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image.asset('assets/images/Rectangle.png', width: 54, height: 54),
-                      const Icon(Icons.close, color: Colors.white, size: 22),
-                    ],
-                  ),
-                ),
+                // Unified close button touching the dialog border
+                top: -6,
+                right: -6,
+                child: _DialogCloseButton(size: 32),
               ),
             ],
           ),
@@ -545,6 +623,14 @@ class _FriendListPageState extends State<FriendListPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_initializedFromArgs) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args is String &&
+          (args == 'Friend list' || args == 'Pending Request')) {
+        selectedTab = args;
+      }
+      _initializedFromArgs = true;
+    }
     return Scaffold(
       drawer: const AppDrawer(),
       extendBodyBehindAppBar: true,
@@ -606,12 +692,19 @@ class _FriendListPageState extends State<FriendListPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 1.0),
                         child: GestureDetector(
-                          onTap: () => Navigator.pushNamed(context, '/game-entrance'),
+                          onTap: () =>
+                              Navigator.pushNamed(context, '/game-entrance'),
                           child: Row(
                             children: const [
                               Icon(Icons.arrow_back, color: Colors.white),
                               SizedBox(width: 8),
-                              Text("Back", style: TextStyle(color: Colors.white, fontSize: 16)),
+                              Text(
+                                "Back",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -620,7 +713,10 @@ class _FriendListPageState extends State<FriendListPage> {
                         padding: const EdgeInsets.only(right: 1.0),
                         child: GestureDetector(
                           onTap: () => _showSettingsDialog(context),
-                          child: const Icon(Icons.settings, color: Colors.white),
+                          child: const Icon(
+                            Icons.settings,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -637,10 +733,16 @@ class _FriendListPageState extends State<FriendListPage> {
                   const SizedBox(height: 18),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
-                      border: Border.all(color: const Color(0x569333EA), width: 1),
+                      border: Border.all(
+                        color: const Color(0x569333EA),
+                        width: 1,
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -684,7 +786,10 @@ class _FriendListPageState extends State<FriendListPage> {
                           ? const Center(
                               child: Text(
                                 "No users found",
-                                style: TextStyle(color: Colors.white54, fontSize: 16),
+                                style: TextStyle(
+                                  color: Colors.white54,
+                                  fontSize: 16,
+                                ),
                               ),
                             )
                           : ListView.builder(
@@ -693,25 +798,49 @@ class _FriendListPageState extends State<FriendListPage> {
                                 final user = searchResults[index];
                                 final name = user['name']!;
                                 final image = user['image']!;
-                                final isFriend = friendList.any((f) => f['name'] == name);
-                                final isPending = pendingRequests.any((r) => r['name'] == name);
+                                final isFriend = friendList.any(
+                                  (f) => f['name'] == name,
+                                );
+                                final isPending = pendingRequests.any(
+                                  (r) => r['name'] == name,
+                                );
 
                                 if (isFriend) {
-                                  return buildFriendCard(name, image, friendList.indexWhere((f) => f['name'] == name));
+                                  return buildFriendCard(
+                                    name,
+                                    image,
+                                    friendList.indexWhere(
+                                      (f) => f['name'] == name,
+                                    ),
+                                  );
                                 } else if (isPending) {
-                                  final matchedUser = pendingRequests.firstWhere((r) => r['name'] == name, orElse: () => {});
+                                  final matchedUser = pendingRequests
+                                      .firstWhere(
+                                        (r) => r['name'] == name,
+                                        orElse: () => {},
+                                      );
                                   final score = matchedUser['score'] ?? '0';
-                                  final sentByMe = matchedUser['sentByMe'] == true;
-                                  return buildPendingRequestCard(name, image, score, sentByMe: sentByMe);
+                                  final sentByMe =
+                                      matchedUser['sentByMe'] == true;
+                                  return buildPendingRequestCard(
+                                    name,
+                                    image,
+                                    score,
+                                    sentByMe: sentByMe,
+                                  );
                                 } else {
                                   return buildAddFriendCard(name, image, () {
-                                    context.read<NotificationProvider>().addGameNotification({
-                                      'type': 'user',
-                                      'time': DateTime.now().toIso8601String(),
-                                      'name': name,
-                                      'message': 'You sent a friend request to $name.',
-                                      'image': image,
-                                    });
+                                    context
+                                        .read<NotificationProvider>()
+                                        .addGameNotification({
+                                          'type': 'user',
+                                          'time': DateTime.now()
+                                              .toIso8601String(),
+                                          'name': name,
+                                          'message':
+                                              'You sent a friend request to $name.',
+                                          'image': image,
+                                        });
                                     setState(() {
                                       pendingRequests.add({
                                         'name': name,
@@ -722,10 +851,10 @@ class _FriendListPageState extends State<FriendListPage> {
                                     });
                                   });
                                 }
-                              }),
+                              },
+                            ),
                     ),
-                  ]
-                  else if (selectedTab == 'Friend list') ...[
+                  ] else if (selectedTab == 'Friend list') ...[
                     const SizedBox(height: 20),
                     Expanded(
                       child: friendList.isEmpty
@@ -743,12 +872,15 @@ class _FriendListPageState extends State<FriendListPage> {
                               itemCount: friendList.length,
                               itemBuilder: (context, index) {
                                 final friend = friendList[index];
-                                return buildFriendCard(friend['name']!, friend['image']!, index);
+                                return buildFriendCard(
+                                  friend['name']!,
+                                  friend['image']!,
+                                  index,
+                                );
                               },
                             ),
-                    )
-                  ]
-                  else if (selectedTab == 'Pending Request') ...[
+                    ),
+                  ] else if (selectedTab == 'Pending Request') ...[
                     const SizedBox(height: 20),
                     Expanded(
                       child: pendingRequests.isEmpty
@@ -776,7 +908,7 @@ class _FriendListPageState extends State<FriendListPage> {
                               },
                             ),
                     ),
-                  ]
+                  ],
                 ],
               ),
             ),
@@ -786,7 +918,11 @@ class _FriendListPageState extends State<FriendListPage> {
     );
   }
 
-  Widget buildAddFriendCard(String name, String image, VoidCallback onSendRequest) {
+  Widget buildAddFriendCard(
+    String name,
+    String image,
+    VoidCallback onSendRequest,
+  ) {
     final friend = {'name': name, 'avatar': image};
 
     return Padding(
@@ -826,11 +962,17 @@ class _FriendListPageState extends State<FriendListPage> {
                       Container(
                         width: 300,
                         height: 160,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 28,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.08),
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.2),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.15),
+                            width: 1.2,
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.3),
@@ -851,27 +993,10 @@ class _FriendListPageState extends State<FriendListPage> {
                           ),
                         ),
                       ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            closedByUser = true;
-                            Navigator.of(context).pop();
-                          },
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: const Icon(Icons.close, color: Colors.white),
-                            ),
-                          ),
-                        ),
+                      _DialogCloseButton(
+                        size: 32,
+                        topOffset: -6,
+                        rightOffset: -6,
                       ),
                     ],
                   ),
@@ -897,7 +1022,12 @@ class _FriendListPageState extends State<FriendListPage> {
     );
   }
 
-  Widget buildPendingRequestCard(String name, String imagePath, String score, {bool sentByMe = false}) {
+  Widget buildPendingRequestCard(
+    String name,
+    String imagePath,
+    String score, {
+    bool sentByMe = false,
+  }) {
     final friend = {'name': name, 'avatar': imagePath};
 
     return Padding(
@@ -911,7 +1041,11 @@ class _FriendListPageState extends State<FriendListPage> {
             Expanded(
               child: Text(
                 name,
-                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             Flexible(
@@ -923,12 +1057,20 @@ class _FriendListPageState extends State<FriendListPage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset('assets/images/star.png', width: 18, height: 18),
+                          Image.asset(
+                            'assets/images/star.png',
+                            width: 18,
+                            height: 18,
+                          ),
                           const SizedBox(width: 4),
                           Flexible(
                             child: Text(
                               score,
-                              style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -944,24 +1086,36 @@ class _FriendListPageState extends State<FriendListPage> {
                         gradient: const RadialGradient(
                           center: Alignment(0.08, 0.08),
                           radius: 7.98,
-                          colors: [Color.fromRGBO(0, 0, 0, 0.8), Color.fromRGBO(147, 51, 234, 0.4)],
+                          colors: [
+                            Color.fromRGBO(0, 0, 0, 0.8),
+                            Color.fromRGBO(147, 51, 234, 0.4),
+                          ],
                           stops: [0.0, 0.5],
                         ),
                       ),
                       child: IconButton(
                         padding: EdgeInsets.zero,
-                        icon: const Icon(Icons.check, color: Colors.white, size: 18),
+                        icon: const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                         onPressed: () {
                           setState(() {
                             friendList.add({'name': name, 'image': imagePath});
-                            pendingRequests.removeWhere((r) => r['name'] == name);
-                            context.read<NotificationProvider>().addGameNotification({
-                              'type': 'user',
-                              'time': DateTime.now().toIso8601String(),
-                              'name': name,
-                              'message': 'You accepted a friend request from $name.',
-                              'image': imagePath,
-                            });
+                            pendingRequests.removeWhere(
+                              (r) => r['name'] == name,
+                            );
+                            context
+                                .read<NotificationProvider>()
+                                .addGameNotification({
+                                  'type': 'user',
+                                  'time': DateTime.now().toIso8601String(),
+                                  'name': name,
+                                  'message':
+                                      'You accepted a friend request from $name.',
+                                  'image': imagePath,
+                                });
                           });
                           _showAcceptedPopup(name, imagePath);
                         },
@@ -977,18 +1131,27 @@ class _FriendListPageState extends State<FriendListPage> {
                       ),
                       child: IconButton(
                         padding: EdgeInsets.zero,
-                        icon: const Icon(Icons.close, color: Colors.white, size: 18),
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                         onPressed: () {
                           setState(() {
-                            pendingRequests.removeWhere((r) => r['name'] == name);
+                            pendingRequests.removeWhere(
+                              (r) => r['name'] == name,
+                            );
                           });
-                          context.read<NotificationProvider>().addGameNotification({
-                            'type': 'user',
-                            'time': DateTime.now().toIso8601String(),
-                            'name': name,
-                            'message': 'You rejected a friend request from $name.',
-                            'image': imagePath,
-                          });
+                          context
+                              .read<NotificationProvider>()
+                              .addGameNotification({
+                                'type': 'user',
+                                'time': DateTime.now().toIso8601String(),
+                                'name': name,
+                                'message':
+                                    'You rejected a friend request from $name.',
+                                'image': imagePath,
+                              });
                         },
                       ),
                     ),
@@ -1006,7 +1169,10 @@ class _FriendListPageState extends State<FriendListPage> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(16),
                                   child: BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                    filter: ImageFilter.blur(
+                                      sigmaX: 10,
+                                      sigmaY: 10,
+                                    ),
                                     child: Container(
                                       padding: const EdgeInsets.all(24),
                                       decoration: BoxDecoration(
@@ -1018,7 +1184,9 @@ class _FriendListPageState extends State<FriendListPage> {
                                         ),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.black.withOpacity(0.3),
+                                            color: Colors.black.withOpacity(
+                                              0.3,
+                                            ),
                                             blurRadius: 12,
                                             offset: const Offset(0, 6),
                                           ),
@@ -1046,21 +1214,30 @@ class _FriendListPageState extends State<FriendListPage> {
                                           ),
                                           const SizedBox(height: 28),
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
                                             children: [
                                               TextButton(
-                                                onPressed: () => Navigator.of(context).pop(),
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
                                                 style: TextButton.styleFrom(
-                                                  foregroundColor: Colors.white70,
+                                                  foregroundColor:
+                                                      Colors.white70,
                                                   shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(20),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          20,
+                                                        ),
                                                     side: BorderSide(
-                                                      color: Colors.white.withOpacity(0.2),
+                                                      color: Colors.white
+                                                          .withOpacity(0.2),
                                                     ),
                                                   ),
                                                 ),
                                                 child: const Padding(
-                                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 16,
+                                                  ),
                                                   child: Text("Cancel"),
                                                 ),
                                               ),
@@ -1068,30 +1245,46 @@ class _FriendListPageState extends State<FriendListPage> {
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                   setState(() {
-                                                    pendingRequests.removeWhere((r) => r['name'] == name);
+                                                    pendingRequests.removeWhere(
+                                                      (r) => r['name'] == name,
+                                                    );
                                                   });
-                                                  context.read<NotificationProvider>().addGameNotification({
-                                                    'type': 'user',
-                                                    'time': DateTime.now().toIso8601String(),
-                                                    'name': name,
-                                                    'message': 'You withdrew your friend request to $name.',
-                                                    'image': imagePath,
-                                                  });
+                                                  context
+                                                      .read<
+                                                        NotificationProvider
+                                                      >()
+                                                      .addGameNotification({
+                                                        'type': 'user',
+                                                        'time': DateTime.now()
+                                                            .toIso8601String(),
+                                                        'name': name,
+                                                        'message':
+                                                            'You withdrew your friend request to $name.',
+                                                        'image': imagePath,
+                                                      });
                                                 },
                                                 style: TextButton.styleFrom(
-                                                  foregroundColor: Colors.redAccent,
+                                                  foregroundColor:
+                                                      Colors.redAccent,
                                                   shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(20),
-                                                    side: const BorderSide(color: Colors.redAccent),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          20,
+                                                        ),
+                                                    side: const BorderSide(
+                                                      color: Colors.redAccent,
+                                                    ),
                                                   ),
                                                 ),
                                                 child: const Padding(
-                                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 16,
+                                                  ),
                                                   child: Text("Withdraw"),
                                                 ),
                                               ),
                                             ],
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -1103,7 +1296,10 @@ class _FriendListPageState extends State<FriendListPage> {
                         );
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
                           border: Border.all(color: Colors.white30),
@@ -1117,7 +1313,7 @@ class _FriendListPageState extends State<FriendListPage> {
                         ),
                       ),
                     ),
-                  ]
+                  ],
                 ],
               ),
             ),
@@ -1183,10 +1379,7 @@ class _FriendListPageState extends State<FriendListPage> {
         padding: const EdgeInsets.symmetric(vertical: 6.0),
         child: Row(
           children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundImage: AssetImage(imagePath),
-            ),
+            CircleAvatar(radius: 24, backgroundImage: AssetImage(imagePath)),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
@@ -1199,7 +1392,12 @@ class _FriendListPageState extends State<FriendListPage> {
               ),
             ),
             IconButton(
-              icon: SvgPicture.asset('assets/images/trash.svg', height: 22, width: 22, color: Colors.redAccent),
+              icon: SvgPicture.asset(
+                'assets/images/trash.svg',
+                height: 22,
+                width: 22,
+                color: Colors.redAccent,
+              ),
               onPressed: () {
                 showDialog(
                   context: context,
@@ -1213,7 +1411,8 @@ class _FriendListPageState extends State<FriendListPage> {
                           'type': 'user',
                           'time': 'JUST NOW',
                           'name': deletedFriend['name'],
-                          'message': 'You removed ${deletedFriend['name']} from your friend list.',
+                          'message':
+                              'You removed ${deletedFriend['name']} from your friend list.',
                           'image': deletedFriend['image'],
                         });
                       });
@@ -1264,16 +1463,16 @@ class _AudioSettingsPopupState extends State<_AudioSettingsPopup> {
                   filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                   child: SingleChildScrollView(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 28,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         gradient: const RadialGradient(
                           center: Alignment(0, -0.2),
                           radius: 1.2,
-                          colors: [
-                            Color(0x2FFFFFFF),
-                            Color(0x33FFFFFF),
-                          ],
+                          colors: [Color(0x2FFFFFFF), Color(0x33FFFFFF)],
                           stops: [0.1, 1.0],
                         ),
                         border: Border.all(color: Colors.white24, width: 1),
@@ -1311,7 +1510,9 @@ class _AudioSettingsPopupState extends State<_AudioSettingsPopup> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               _AudioIconButton(
-                                icon: isMasterMuted ? Icons.music_off : Icons.music_note,
+                                icon: isMasterMuted
+                                    ? Icons.music_off
+                                    : Icons.music_note,
                                 onTap: () {
                                   setState(() {
                                     if (isMasterMuted) {
@@ -1327,7 +1528,9 @@ class _AudioSettingsPopupState extends State<_AudioSettingsPopup> {
                               ),
                               const SizedBox(width: 24),
                               _AudioIconButton(
-                                icon: isSfxMuted ? Icons.volume_off : Icons.volume_up,
+                                icon: isSfxMuted
+                                    ? Icons.volume_off
+                                    : Icons.volume_up,
                                 onTap: () {
                                   setState(() {
                                     if (isSfxMuted) {
@@ -1377,17 +1580,10 @@ class _AudioSettingsPopupState extends State<_AudioSettingsPopup> {
                   ),
                 ),
               ),
-              Positioned(
-                top: 5,
-                right: 5,
-                child: GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: const CircleAvatar(
-                    radius: 14,
-                    backgroundColor: Colors.white30,
-                    child: Icon(Icons.close, size: 16, color: Colors.white),
-                  ),
-                ),
+              _DialogCloseButton(
+                size: 28,
+                topOffset: -6,
+                rightOffset: -6,
               ),
             ],
           ),
@@ -1396,7 +1592,11 @@ class _AudioSettingsPopupState extends State<_AudioSettingsPopup> {
     );
   }
 
-  Widget _settingsPill({required IconData icon, required String label, required VoidCallback onTap}) {
+  Widget _settingsPill({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -1424,7 +1624,11 @@ class _AudioSettingsPopupState extends State<_AudioSettingsPopup> {
     );
   }
 
-  Widget _buildVolumeRow(String label, double value, ValueChanged<double> onChanged) {
+  Widget _buildVolumeRow(
+    String label,
+    double value,
+    ValueChanged<double> onChanged,
+  ) {
     return Row(
       children: [
         SizedBox(
@@ -1444,11 +1648,19 @@ class _AudioSettingsPopupState extends State<_AudioSettingsPopup> {
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onPanUpdate: (details) {
-                  final newWidth = (details.localPosition.dx / constraints.maxWidth).clamp(0.0, 1.0);
+                  final newWidth =
+                      (details.localPosition.dx / constraints.maxWidth).clamp(
+                        0.0,
+                        1.0,
+                      );
                   onChanged(newWidth);
                 },
                 onTapDown: (details) {
-                  final newWidth = (details.localPosition.dx / constraints.maxWidth).clamp(0.0, 1.0);
+                  final newWidth =
+                      (details.localPosition.dx / constraints.maxWidth).clamp(
+                        0.0,
+                        1.0,
+                      );
                   onChanged(newWidth);
                 },
                 child: Container(
@@ -1502,10 +1714,7 @@ class _AudioIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  const _AudioIconButton({
-    required this.icon,
-    required this.onTap,
-  });
+  const _AudioIconButton({required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -1562,7 +1771,9 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
       builder: (ctx) {
         return AlertDialog(
           backgroundColor: const Color(0xFF2D0C4B).withOpacity(0.9),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           title: const Text(
             'Settings',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -1571,25 +1782,69 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
             'Settings content goes here.',
             style: TextStyle(color: Colors.white70),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Close'),
-            ),
-          ],
         );
       },
     );
   }
 
-   void _showPlayerPopup(BuildContext context, Map<String, dynamic> player) {
+  Widget _suggestionToggleButton({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        decoration: isSelected
+            ? BoxDecoration(
+                gradient: const RadialGradient(
+                  center: Alignment(0.08, 0.08),
+                  radius: 7.98,
+                  colors: [
+                    Color.fromRGBO(0, 0, 0, 0.8),
+                    Color.fromRGBO(147, 51, 234, 0.4),
+                  ],
+                  stops: [0.0, 0.5],
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x66000000),
+                    offset: Offset(0, 4),
+                    blurRadius: 4,
+                  ),
+                ],
+              )
+            : BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: const Color.fromRGBO(147, 51, 234, 0.4),
+                  width: 1,
+                ),
+              ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showPlayerPopup(BuildContext context, Map<String, dynamic> player) {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 60),
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 60,
+          ),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -1637,8 +1892,11 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                       ),
                                     ),
                                     const SizedBox(width: 10),
-                                    const Icon(Icons.person_add_alt_1,
-                                        size: 18, color: Colors.white),
+                                    const Icon(
+                                      Icons.person_add_alt_1,
+                                      size: 18,
+                                      color: Colors.white,
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 4),
@@ -1647,13 +1905,16 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                     const Text(
                                       "Beginner",
                                       style: TextStyle(
-                                          color: Colors.white70, fontSize: 12),
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                      ),
                                     ),
                                     const SizedBox(width: 6),
                                     CircleAvatar(
                                       radius: 8,
                                       backgroundImage: AssetImage(
-                                          'assets/images/india-flag.png'),
+                                        'assets/images/india-flag.png',
+                                      ),
                                       backgroundColor: Colors.transparent,
                                     ),
                                   ],
@@ -1671,12 +1932,22 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(255, 255, 255, 0.03),
-                                    border: Border.all(color: Color(0xFF8A6FCF), width: 0.5),
+                                    color: const Color.fromRGBO(
+                                      255,
+                                      255,
+                                      255,
+                                      0.03,
+                                    ),
+                                    border: Border.all(
+                                      color: Color(0xFF8A6FCF),
+                                      width: 0.5,
+                                    ),
                                     borderRadius: BorderRadius.circular(12),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: const Color(0x59CFCFCF).withOpacity(0.1),
+                                        color: const Color(
+                                          0x59CFCFCF,
+                                        ).withOpacity(0.1),
                                         offset: const Offset(0, 1),
                                       ),
                                       BoxShadow(
@@ -1687,14 +1958,16 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         "Player Stats",
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                            color: Colors.white),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                       const Divider(
                                         color: Color(0xFF8A6FCF),
@@ -1703,7 +1976,8 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                       ),
                                       const SizedBox(height: 6),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
                                         children: const [
                                           _StatColumn(
                                             value: "16",
@@ -1716,7 +1990,7 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                             valueColor: Color(0xFFA46BF5),
                                           ),
                                         ],
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -1727,12 +2001,22 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(255, 255, 255, 0.03),
-                                    border: Border.all(color: Color(0xFF8A6FCF), width: 0.5),
+                                    color: const Color.fromRGBO(
+                                      255,
+                                      255,
+                                      255,
+                                      0.03,
+                                    ),
+                                    border: Border.all(
+                                      color: Color(0xFF8A6FCF),
+                                      width: 0.5,
+                                    ),
                                     borderRadius: BorderRadius.circular(12),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: const Color(0x59CFCFCF).withOpacity(0.1),
+                                        color: const Color(
+                                          0x59CFCFCF,
+                                        ).withOpacity(0.1),
                                         offset: const Offset(0, 1),
                                       ),
                                       BoxShadow(
@@ -1743,14 +2027,16 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         "Badges",
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                            color: Colors.white),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                       const Divider(
                                         color: Color(0xFF8A6FCF),
@@ -1767,7 +2053,8 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                           ),
                                           const SizedBox(width: 8),
                                           Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: const [
                                               Text(
                                                 "Amature",
@@ -1786,9 +2073,9 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                                                 ),
                                               ),
                                             ],
-                                          )
+                                          ),
                                         ],
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -1801,7 +2088,10 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: const Color.fromRGBO(255, 255, 255, 0.03),
-                            border: Border.all(color: Color(0xFF8A6FCF), width: 0.5),
+                            border: Border.all(
+                              color: Color(0xFF8A6FCF),
+                              width: 0.5,
+                            ),
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
@@ -1833,7 +2123,8 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                               ),
                               const SizedBox(height: 8),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: const [
                                   _AchievementBox(
                                     icon: Icons.shopping_bag,
@@ -1876,8 +2167,11 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                       shape: BoxShape.circle,
                     ),
                     padding: const EdgeInsets.all(8),
-                    child: const Icon(Icons.close,
-                        size: 16, color: Color(0xffD9BFFF)),
+                    child: const Icon(
+                      Icons.close,
+                      size: 16,
+                      color: Color(0xffD9BFFF),
+                    ),
                   ),
                 ),
               ),
@@ -1889,8 +2183,7 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
   }
 
   Future<void> _showRequestSentPopup(String name, String imagePath) async {
-    bool closedByUser = false;
-    showDialog(
+    await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => Dialog(
@@ -1899,12 +2192,14 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
           children: [
             Container(
               width: 320,
-              height: 180,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.2),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.15),
+                  width: 1.2,
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.3),
@@ -1914,64 +2209,72 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                 ],
               ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     name,
-                    style: GoogleFonts.kronaOne(color: Colors.white, fontSize: 22),
+                    style: GoogleFonts.kronaOne(
+                      color: Colors.white,
+                      fontSize: 22,
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  CircleAvatar(radius: 56, backgroundImage: AssetImage(imagePath)),
+                  CircleAvatar(
+                    radius: 56,
+                    backgroundImage: AssetImage(imagePath),
+                  ),
                   const SizedBox(height: 20),
                   const Text(
                     'Request sent successfully',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
-            Positioned(
-              top: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: () {
-                  closedByUser = true;
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.black.withOpacity(0.5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: const Icon(Icons.close, color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
+            _DialogCloseButton(size: 32, topOffset: -6, rightOffset: -6),
           ],
         ),
       ),
     );
-    await Future.delayed(const Duration(milliseconds: 700));
-    if (Navigator.of(context).canPop() && !closedByUser) {
-      Navigator.of(context).pop();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final filtered = suggestions
-        .where((n) => n['name']!.toLowerCase().contains(_searchController.text.toLowerCase()))
+        .where(
+          (n) => n['name']!.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ),
+        )
         .toList();
 
     return Scaffold(
       drawer: const AppDrawer(),
       extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.black.withOpacity(0.6),
+        elevation: 0,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, color: Colors.white),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+        centerTitle: true,
+        title: Image.asset('assets/images/logo.png', height: 40),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: NotificationBell(),
+          ),
+        ],
+      ),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: currentIndex,
         onTap: _onNavTapped,
@@ -1979,95 +2282,118 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
       ),
       body: Stack(
         children: [
-          Positioned.fill(child: Image.asset('assets/images/background.png', fit: BoxFit.cover)),
-          Positioned.fill(child: Container(color: Colors.black.withOpacity(0.6))),
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/background.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned.fill(
+            child: Container(color: Colors.black.withOpacity(0.65)),
+          ),
           SafeArea(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Builder(
-                    builder: (ctx) => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.menu, color: Colors.white),
-                          onPressed: () => Scaffold.of(ctx).openDrawer(),
-                        ),
-                        Image.asset('assets/images/logo.png', height: 40),
-                        const NotificationBell(),
-                      ],
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Text(
+                      "FRIENDS",
+                      style: GoogleFonts.kronaOne(
+                        fontSize: 22,
+                        color: Colors.white,
+                        letterSpacing: 4,
+                        fontWeight: FontWeight.w100,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                Text('FRIENDS', style: GoogleFonts.kronaOne(color: Colors.white, letterSpacing: 6, fontSize: 20)),
-                const SizedBox(height: 6),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.arrow_back_ios_new,
+                  const SizedBox(height: 25),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 1.0),
+                        child: GestureDetector(
+                          onTap: () =>
+                              Navigator.pushNamed(context, '/game-entrance'),
+                          child: Row(
+                            children: const [
+                              Icon(Icons.arrow_back, color: Colors.white),
+                              SizedBox(width: 8),
+                              Text(
+                                "Back",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 1.0),
+                        child: GestureDetector(
+                          onTap: () => _showSettingsDialog(context),
+                          child: const Icon(
+                            Icons.settings,
                             color: Colors.white,
-                            size: 18,
                           ),
-                          SizedBox(width: 6),
-                          Text(
-                            "Back",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 22),
-                
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  
-  GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: const Color(0xFF6B21A8),
-                          border: Border.all(color: const Color(0xFF9333EA)),
                         ),
-                        child: const Text('Friend List', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.transparent,
-                        border: Border.all(color: const Color(0xFF9333EA)),
+                    ],
+                  ),
+                  const SizedBox(height: 28),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _suggestionToggleButton(
+                        label: 'Friend list',
+                        isSelected: false,
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const FriendListPage(),
+                              settings: const RouteSettings(
+                                arguments: 'Friend list',
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      child: const Text('Pending Request', style: TextStyle(color: Color(0xFFBFA9DD), fontWeight: FontWeight.w600)),
+                      const SizedBox(width: 12),
+                      _suggestionToggleButton(
+                        label: 'Pending Request',
+                        isSelected: false,
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const FriendListPage(),
+                              settings: const RouteSettings(
+                                arguments: 'Pending Request',
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
                     ),
-                  ],
-                ),
-                const SizedBox(height: 18),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 0),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
-                      border: Border.all(color: const Color(0x569333EA), width: 1),
+                      border: Border.all(
+                        color: const Color(0x569333EA),
+                        width: 1,
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -2077,10 +2403,6 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                               setState(() {
                                 _searchController.clear();
                                 isSearching = false;
-                              });
-                            } else {
-                              setState(() {
-                                isSearching = true;
                               });
                             }
                           },
@@ -2107,68 +2429,94 @@ class _FriendSuggestionsPageState extends State<FriendSuggestionsPage> {
                       ],
                     ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    itemCount: filtered.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 16),
-                    itemBuilder: (_, i) {
-                      final name = filtered[i]['name']!;
-                      final avatar = filtered[i]['avatar']!;
-                      return Row(
-                        children: [
-                          CircleAvatar(radius: 22, backgroundImage: AssetImage(avatar)),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                final parent = context.findAncestorStateOfType<_FriendListPageState>();
-                                if (parent != null) {
-                                  parent._showPlayerPopup(context, {'name': name, 'avatar': avatar});
-                                } else {
-                                  _showPlayerPopup(context, {'name': name, 'avatar': avatar});
-                                }
-                              },
-                              child: Text(
-                                name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      itemCount: filtered.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      itemBuilder: (_, i) {
+                        final name = filtered[i]['name']!;
+                        final avatar = filtered[i]['avatar']!;
+                        return Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 22,
+                              backgroundImage: AssetImage(avatar),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  final parent = context
+                                      .findAncestorStateOfType<
+                                        _FriendListPageState
+                                      >();
+                                  if (parent != null) {
+                                    parent._showPlayerPopup(context, {
+                                      'name': name,
+                                      'avatar': avatar,
+                                    });
+                                  } else {
+                                    _showPlayerPopup(context, {
+                                      'name': name,
+                                      'avatar': avatar,
+                                    });
+                                  }
+                                },
+                                child: Text(
+                                  name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              await _showRequestSentPopup(name, avatar);
-                              if (mounted) {
-                                context.read<NotificationProvider>().addGameNotification({
-                                  'type': 'user',
-                                  'time': DateTime.now().toIso8601String(),
-                                  'name': name,
-                                  'message': 'You sent a friend request to $name.',
-                                  'image': avatar,
-                                  'trailingIcon': 'assets/images/trash.png',
-                                });
-                                setState(() {
-                                  suggestions.removeWhere((u) => u['name'] == name);
-                                });
-                              }
-                            },
-                            child: Image.asset('assets/images/Vector-2.png', width: 22, height: 22),
-                          ),
-                        ],
-                      );
-                    },
+                            GestureDetector(
+                              onTap: () async {
+                                await _showRequestSentPopup(name, avatar);
+                                if (mounted) {
+                                  context
+                                      .read<NotificationProvider>()
+                                      .addGameNotification({
+                                        'type': 'user',
+                                        'time': DateTime.now()
+                                            .toIso8601String(),
+                                        'name': name,
+                                        'message':
+                                            'You sent a friend request to $name.',
+                                        'image': avatar,
+                                        'trailingIcon':
+                                            'assets/images/trash.png',
+                                      });
+                                  setState(() {
+                                    suggestions.removeWhere(
+                                      (u) => u['name'] == name,
+                                    );
+                                  });
+                                }
+                              },
+                              child: Image.asset(
+                                'assets/images/Vector-2.png',
+                                width: 22,
+                                height: 22,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -2196,75 +2544,78 @@ class DeleteFriendDialog extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.06),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.15),
-                  width: 1.2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Confirm to delete $friendName from your friend list?",
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 14,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.06),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.15),
+                      width: 1.2,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 28),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white70,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            side: BorderSide(
-                              color: Colors.white.withOpacity(0.2),
-                            ),
-                          ),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Text("Cancel"),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          onConfirm();
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.redAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            side: const BorderSide(color: Colors.redAccent),
-                          ),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Text("OK"),
-                        ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 12,
+                        offset: const Offset(0, 6),
                       ),
                     ],
-                  )
-                ],
-              ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Confirm to delete $friendName from your friend list?",
+                        style: const TextStyle(color: Colors.white70, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 28),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white70,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                side: BorderSide(
+                                  color: Colors.white.withOpacity(0.2),
+                                ),
+                              ),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text("Cancel"),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              onConfirm();
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.redAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                side: const BorderSide(color: Colors.redAccent),
+                              ),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text("OK"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                _DialogCloseButton(size: 28, topOffset: -6, rightOffset: -6),
+              ],
             ),
           ),
         ),
@@ -2301,20 +2652,10 @@ class _AchievementBox extends StatelessWidget {
             ],
           ),
           padding: const EdgeInsets.all(12),
-          child: Icon(
-            icon,
-            size: 24,
-            color: Colors.white,
-          ),
+          child: Icon(icon, size: 24, color: Colors.white),
         ),
         const SizedBox(height: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.white,
-          ),
-        ),
+        Text(label, style: const TextStyle(fontSize: 12, color: Colors.white)),
         const SizedBox(height: 4),
         Text(
           value,
@@ -2354,13 +2695,7 @@ class _StatColumn extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 9,
-            color: Colors.white,
-          ),
-        ),
+        Text(label, style: const TextStyle(fontSize: 9, color: Colors.white)),
       ],
     );
   }

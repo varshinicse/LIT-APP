@@ -1766,46 +1766,40 @@ class _AudioIconButton extends StatelessWidget {
   }
 }
 
-/// Reusable dialog close button that uses `assets/images/Rectangle.png`.
-/// Tap -> closes the top-most Navigator (dialog).
+/// Reusable dialog close button that uses `assets/images/close.png`.
+/// Positioned slightly outside the top-right so the image touches the dialog border curve.
 class _DialogCloseButton extends StatelessWidget {
-  final double size; // background image size
-  final EdgeInsets margin; // offset from top-right
-  const _DialogCloseButton({Key? key, this.size = 36, this.margin = const EdgeInsets.only(top: 0, right: 8)}) : super(key: key);
+  final double size; // square size for the close image
+  final double topOffset; // negative to overlap outwards
+  final double rightOffset; // negative to overlap outwards
+  const _DialogCloseButton({Key? key, this.size = 32, this.topOffset = -10, this.rightOffset = -10}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: margin.top,
-      right: margin.right,
+      top: topOffset,
+      right: rightOffset,
       child: Semantics(
         button: true,
         label: 'Close',
         child: GestureDetector(
           onTap: () {
-            // Close the dialog / topmost route
             if (Navigator.of(context).canPop()) {
               Navigator.of(context).pop();
             }
           },
-          child: SizedBox(
+          child: Image.asset(
+            'assets/images/close.png',
             width: size,
             height: size,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Rectangle background (use existing asset)
-                Image.asset('assets/images/Rectangle.png', width: size, height: size, fit: BoxFit.contain),
-                // White X icon centered on top
-                const Icon(Icons.close, size: 16, color: Colors.white),
-              ],
-            ),
+            fit: BoxFit.contain,
           ),
         ),
       ),
     );
   }
 }
+
 // Reward icon animation widget
 class _RewardIcon extends StatefulWidget {
   final String assetPath;
@@ -2077,19 +2071,7 @@ class _StreakDialogState extends State<StreakDialog>
                           ),
 
                           // Close button
-                          Positioned(
-                            top: -6,
-                            right: -6,
-                            child: GestureDetector(
-                              onTap: () => Navigator.of(context).pop(),
-                              child: Image.asset(
-                                'assets/images/close.png',
-                                width: 32,
-                                height: 16,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
+                          const _DialogCloseButton(size: 32, topOffset: -6, rightOffset: -6),
                         ],
                       ),
                     ),

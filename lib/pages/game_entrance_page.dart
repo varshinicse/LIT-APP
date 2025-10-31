@@ -48,7 +48,7 @@ class _GameEntrancePageState extends State<GameEntrancePage> {
       drawer: const AppDrawer(),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0.6),
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Builder(
           builder: (context) => IconButton(
@@ -119,7 +119,7 @@ class _GameEntrancePageState extends State<GameEntrancePage> {
                             clipBehavior: Clip.none,
                             children: [
                               Container(
-                                width: 340,
+                                width: 380,
                                 padding: const EdgeInsets.only(top: 20, bottom: 24),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(18),
@@ -202,7 +202,7 @@ class _GameEntrancePageState extends State<GameEntrancePage> {
                           ),
                         ),
 
-                        const SizedBox(height: 50),
+                        const SizedBox(height: 80),
 
                         // 🔹 Buttons
                         Padding(
@@ -372,6 +372,20 @@ class _AudioSettingsPopupState extends State<_AudioSettingsPopup> {
           child: Stack(
             clipBehavior: Clip.none,
             children: [
+              Positioned(
+                top: -6,
+                right: -6,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context); // closes the dialog
+                  },
+                  child: Image.asset(
+                    'assets/close.png',
+                    width: 28,
+                    height: 28,
+                  ),
+                ),
+              ),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: BackdropFilter(

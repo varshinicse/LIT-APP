@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lit/widgets/app_drawer.dart';
 import '../widgets/notification_bell.dart';
+import 'package:lit/widgets/common_button.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -12,6 +13,7 @@ class ShopPage extends StatefulWidget {
 
 class _ShopPageState extends State<ShopPage> {
   String selectedTab = 'Gems';
+  int currentIndex = 0;
 
   final List<Map<String, dynamic>> gemItems = [
     {'qty': 25, 'label': 'Fistful of Gems', 'price': '240 ₹', 'icon': 'assets/images/gems1.png'},
@@ -28,20 +30,10 @@ class _ShopPageState extends State<ShopPage> {
     {'qty': '∞', 'label': 'Hearts (2 min)', 'price': '20 GEMS', 'icon': 'assets/images/heart.png'},
   ];
 
-  void _onTabTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushReplacementNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushReplacementNamed(context, '/saved_item_page');
-        break;
-      case 2:
-        Navigator.pushReplacementNamed(context, '/cart');
-        break;
-      case 3:
-        Navigator.pushReplacementNamed(context, '/profile');
-        break;
+  void _onNavTapped(int index) {
+    setState(() => currentIndex = index);
+    if (index == 0) {
+      Navigator.pushReplacementNamed(context, '/home');
     }
   }
 
@@ -161,35 +153,12 @@ class _ShopPageState extends State<ShopPage> {
         ],
       ),
 
-      // ✅ Custom bottom navigation bar
-      bottomNavigationBar: Container(
-        height: 70,
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.8),
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () => _onTabTapped(0),
-              icon: Image.asset('assets/images/home_icon.png', width: 30, height: 30),
-            ),
-            IconButton(
-              onPressed: () => _onTabTapped(1),
-              icon: Image.asset('assets/images/save-pro-icon.png', width: 30, height: 30),
-            ),
-            IconButton(
-              onPressed: () => _onTabTapped(2),
-              icon: Image.asset('assets/images/grocery-store.png', width: 30, height: 30),
-            ),
-            IconButton(
-              onPressed: () => _onTabTapped(3),
-              icon: Image.asset('assets/images/profile_icon.png', width: 30, height: 30),
-            ),
-          ],
-        ),
+      // ✅ Shared bottom navigation bar (same as game_page.dart)
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: currentIndex,
+        onTap: _onNavTapped,
+        isMarketplace: true,
+        isGame: false,
       ),
     );
   }
